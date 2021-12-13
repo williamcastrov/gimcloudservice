@@ -95,7 +95,13 @@ function Informes() {
                 <ListItemIcon>
                   <ReorderIcon />
                 </ListItemIcon>
-                <ListItemText primary="Activos en Renta" />
+                <ListItemText primary="Equipos Vendidos" />
+              </ListItem>
+              <ListItem component={Link} button to="/flotarenta/registrollamadas" className={classes.nested}>
+                <ListItemIcon>
+                  <ReorderIcon />
+                </ListItemIcon>
+                <ListItemText primary="Informe Registro Llamadas" />
               </ListItem>
               <ListItem component={Link} button to="/flotarenta/informeseguros" className={classes.nested}>
                 <ListItemIcon>

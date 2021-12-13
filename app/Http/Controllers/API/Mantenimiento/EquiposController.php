@@ -297,14 +297,15 @@ class EquiposController extends Controller
       public function listar_activosrenta(){  
         try {
           //Muestra Unicamente los tipos de Interlocutores PROVEEDORES = 1
-          $data = DB::select("SELECT t0.*, t1.nombre_emp, t2.descripcion_fre, t3.razonsocial_int, t4.descripcion_mar,
+          $data = DB::select("SELECT t0.*, t1.nombre_emp, t2.descripcion_fre, t4.descripcion_mar,
                                      t5.descripcion_grp,  t5.codigogrupo_grp, t6.nombre_est, t7.nombre_estcli, t8.nombre_estmtto,
                                      t9.codigo_sgre,      t9.descripcion_sgre, t5.id_grp, t9.id_sgre, datosadicionalequipos.*,
                                      seguros.id_seg, seguros.declaracionimportacion_seg, seguros.numeroseguro_seg,
                                      ubicaciones.cliente_ubi,
                                      ubicaciones.direccion_ubi, ubicaciones.ciudad_ubi, interlocutores_cli.razonsocial_cli,
-                                     ciudades.nombre_ciu
-          FROM equipos as t0 INNER JOIN empresa        as t1 INNER JOIN frecuencias   as t2 INNER JOIN interlocutores as t3
+                                     ciudades.nombre_ciu, interlocutores_cli.telefono_cli, interlocutores_cli.email_cli,
+                                     interlocutores_cli.direccion_cli
+          FROM equipos as t0 INNER JOIN empresa        as t1 INNER JOIN frecuencias   as t2
                              INNER JOIN marcas         as t4 INNER JOIN gruposequipos as t5 INNER JOIN estados        as t6
                              INNER JOIN estadoscliente as t7 INNER JOIN estadosmtto   as t8 INNER JOIN subgrupopartes as t9
                              INNER JOIN estadoscalidad as t10
@@ -313,8 +314,8 @@ class EquiposController extends Controller
                              left join ubicaciones on (ubicaciones.equipo_ubi = t0.id_equ and estado_ubi = 31)
                              left join interlocutores_cli on (ubicaciones.cliente_ubi = interlocutores_cli.id_cli)
                              left join ciudades on (ubicaciones.ciudad_ubi = ciudades.id_ciu)               
-          WHERE t0.empresa_equ        = t1.id_emp  and t0.frecuencia_equ    = t2.id_fre    and t0.propietario_equ = t3.id_int     and
-                t0.marca_equ          = t4.id_mar  and t0.grupoequipo_equ   = t5.id_grp    and t0.tipo_equ        = 8             and
+          WHERE t0.empresa_equ        = t1.id_emp  and t0.frecuencia_equ    = t2.id_fre    and 
+                t0.marca_equ          = t4.id_mar  and t0.grupoequipo_equ   = t5.id_grp    and t0.tipo_equ        IN (8,18,19)    and
                 t0.estadocontable_equ = t6.id_est  and t0.estadocliente_equ = t7.id_estcli and t0.estadomtto_equ  = t8.id_estmtto and
                 t0.subgrupoparte_equ  = t9.id_sgre and t0.estadocalidad_equ = t10.id_estcal
           ORDER BY t0.id_equ ASC");

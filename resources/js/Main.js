@@ -133,6 +133,7 @@ import ControlAlzas from './pages/Informes/FlotaRenta/ControlAlzas';
 //Impresión PDF
 import ActivosRenta from "./pages/Informes/FlotaRenta/ActivosRenta/ActivosRenta";
 import InformeSeguros from "./pages/Informes/FlotaRenta/InformeSeguros";
+import Registrollamadas from "./pages/Informes/Registrollamadas";
 import InformeEquipos from "./pages/Informes/FlotaRenta/InformeEquipos";
 import InformeOT from "./pages/Informes/FlotaRenta/InformeOT";
 import InformeHojaVidaEquipos from "./pages/Informes/FlotaRenta/HojaVidaEquipo";
@@ -319,6 +320,7 @@ function Main(props) {
               
               <Route path="/flotarenta/activosrenta" component={ActivosRenta} />
               <Route path="/flotarenta/informeseguros" component={InformeSeguros} />
+              <Route path="/flotarenta/registrollamadas" component={Registrollamadas} />
               <Route path="/flotarenta/informeequipos" component={InformeEquipos} />
               <Route path="/flotarenta/informeot" component={InformeOT} />
               <Route path="/flotarenta/informependientes" component={InformePendientes} />

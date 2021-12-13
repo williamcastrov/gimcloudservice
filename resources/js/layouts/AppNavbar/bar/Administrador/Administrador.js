@@ -46,12 +46,9 @@ function Administrador() {
         >
             <Parametros />
             <Interlocutores />
-            <Activos />
-            <Almacenes />
             <Mantenimiento />
             <Ordenes />
             <Ventas />
-            <EntregaRecepcion />
             <Costos />
             <SubirArchivos />
             <Informes />

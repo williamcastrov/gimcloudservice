@@ -262,7 +262,7 @@ class CumplimientoOServController extends Controller
         try { 
           $data = DB::select("SELECT Count(*) as actividadesxotactivas
           FROM cumplimientooserv as t0 
-          WHERE t0.id_cosv = $id_cosv and t0.estado_cosv = 23");
+          WHERE t0.id_cosv = $id_cosv and t0.estado_cosv = 12");
 
           if ($data) {
               $response['data'] = $data;
@@ -311,7 +311,7 @@ class CumplimientoOServController extends Controller
 
           //$res = Ordenes::where("id_otr",$id_otr)->update($id_otr);
           //$res = DB::select('update estado_otr = 32 where id_otr = ?', [$id_otr]);
-          $res = DB::update('update cumplimientooserv set estado_cosv = 27, tiempoactividad_cosv = '.$tiempoactividad.
+          $res = DB::update('update cumplimientooserv set estado_cosv = 16, tiempoactividad_cosv = '.$tiempoactividad.
                              ' where id_actividad = ?', [$id_actividad]);
 
           //$res = DB::update('update ordenservicio set iniciatransporte_otr =  '."NOW()".' where id_otr = ?', [$id_otr]);

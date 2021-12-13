@@ -101,6 +101,9 @@ Route::delete('/tipointerlocutor/delete/{id}', 'App\Http\Controllers\API\Interlo
 Route::put('/tipointerlocutor/update/{id}', 'App\Http\Controllers\API\Interlocutores\TipoInterlocutoresController@update');
 
 Route::get('/especialidad/listar_especialidades', 'App\Http\Controllers\API\Interlocutores\EspecialidadesController@listar_especialidades');
+Route::get('/especialidad/listar_especialidadesproveedores', 'App\Http\Controllers\API\Interlocutores\EspecialidadesController@listar_especialidadesproveedores');
+Route::get('/especialidad/listar_especialidadesclientes', 'App\Http\Controllers\API\Interlocutores\EspecialidadesController@listar_especialidadesclientes');
+Route::get('/especialidad/listar_especialidadesempleados', 'App\Http\Controllers\API\Interlocutores\EspecialidadesController@listar_especialidadesempleados');
 Route::post('/especialidad/create', 'App\Http\Controllers\API\Interlocutores\EspecialidadesController@create');
 Route::get('/especialidad/get/{id}', 'App\Http\Controllers\API\Interlocutores\EspecialidadesController@get');
 Route::delete('/especialidad/delete/{id}', 'App\Http\Controllers\API\Interlocutores\EspecialidadesController@delete');

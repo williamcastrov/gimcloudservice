@@ -401,7 +401,7 @@ $html1 = ' TEMPO';
                                       ordenservicio.subgrupoequipo_otr = t8.id_sgre  and ordenservicio.equipo_otr          = t10.id_equ and
                                       ordenservicio.prioridad_otr 	   = t11.id_abc  and ordenservicio.tipo_otr      	     = t12.id_tmt and
                                       t10.marca_equ  	                 = t13.id_mar  and ordenservicio.tiposervicio_otr    = t15.id_tser and
-                                      ordenservicio.tipooperacion_otr  = t16.id_tope and (ordenservicio.estado_otr IN (21,22,23,25,34 ))");
+                                      ordenservicio.tipooperacion_otr  = t16.id_tope and (ordenservicio.estado_otr IN (10,11,12,14,15,17 ))");
 
           $response['data'] = $data;
           
@@ -442,7 +442,7 @@ $html1 = ' TEMPO';
                                       ordenservicio.subgrupoequipo_otr = t8.id_sgre  and ordenservicio.equipo_otr          = t10.id_equ and
                                       ordenservicio.prioridad_otr 	   = t11.id_abc  and ordenservicio.tipo_otr      	     = t12.id_tmt and
                                       t10.marca_equ  	                 = t13.id_mar  and ordenservicio.tiposervicio_otr    = t15.id_tser and
-                                      ordenservicio.tipooperacion_otr  = t16.id_tope and (ordenservicio.estado_otr IN (21,22,23,25,34 )) and
+                                      ordenservicio.tipooperacion_otr  = t16.id_tope and (ordenservicio.estado_otr IN (10,11,12,14,15,17  )) and
                                       t10.id_equ                       = t17.equipo_eus");
 
           $response['data'] = $data;
@@ -463,7 +463,7 @@ $html1 = ' TEMPO';
           //Muestra Unicamente los tipos de Interlocutores PROVEEDORES = 1
           $data = DB::select("SELECT count(*) as totalotactivas
                               FROM   ordenservicio
-                              WHERE  ordenservicio.estado_otr IN (21,22,23,25,26,34)");
+                              WHERE  ordenservicio.estado_otr IN (10,11,12,14,15,17 )");
 
           $response['data'] = $data;
           
@@ -918,7 +918,7 @@ $html1 = ' TEMPO';
                                      INNER JOIN tipooperacion  as t16
                                      left join datosadicionalequipos on (datosadicionalequipos.id_dequ = ordenservicio.equipo_otr)
                                      left join contactos on (contactos.identificacion_con = ordenservicio.nitcliente_otr)
-                              WHERE  (ordenservicio.tipooperacion_otr IN ( 3, 4, 6 ))   and (ordenservicio.estado_otr   IN (21,22,23,25,26,34)) and 
+                              WHERE  (ordenservicio.tipooperacion_otr IN ( 3, 4, 6 ))   and (ordenservicio.estado_otr   IN (10,11,12,14,15,17 )) and 
                                       ordenservicio.empresa_otr        = t1.id_emp  and ordenservicio.estado_otr       = t2.id_est   and
                                       ordenservicio.ciudad_otr         = t3.id_ciu  and ordenservicio.proveedor_otr    = t4.id_int   and
                                       ordenservicio.cliente_otr        = t5.id_cli  and ordenservicio.operario_otr   	 = t6.id_emp   and
@@ -1016,7 +1016,7 @@ $html1 = ' TEMPO';
                                     ordenservicio.subgrupoequipo_otr = t8.id_sgre and ordenservicio.equipo_otr       = t10.id_equ  and
                                     ordenservicio.prioridad_otr 	   = t11.id_abc and ordenservicio.tipo_otr      	 = t12.id_tmt  and
                                     t10.marca_equ  	                 = t13.id_mar and ordenservicio.tiposervicio_otr = t15.id_tser and
-                                    ordenservicio.tipooperacion_otr  = t16.id_tope and (ordenservicio.estado_otr IN (21,22,23,25,26,34 ))
+                                    ordenservicio.tipooperacion_otr  = t16.id_tope and (ordenservicio.estado_otr IN (10,11,12,14,15,17  ))
                               ORDER BY id_otr DESC");
           
           if ($data) {

@@ -143,8 +143,8 @@ function Empleados() {
   
   useEffect (() => {
     async function fetchDataEspecialidades() {
-    const res = await especialidadesServices.listEspecialidades();
-    setListarEspecialidades(res.data) 
+    const res = await especialidadesServices.listEspecialidadesempleados();
+    setListarEspecialidades(res.data)
     //console.log(res.data);
   }
   fetchDataEspecialidades();

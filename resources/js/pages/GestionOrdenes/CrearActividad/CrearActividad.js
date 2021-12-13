@@ -99,7 +99,7 @@ function CrearActividad(props) {
         finaltransporte_cosv: fechainicial,
         tiempotransporte_cosv: 0,
         horometro_cosv:0,
-        estado_cosv: 23,
+        estado_cosv: 12,
         idcomponente: 0,
         seriecomponente: 0,
         voltajecomponente: 0,
@@ -108,7 +108,7 @@ function CrearActividad(props) {
         celdasreferenciacomponente: 0,
         cofreseriecomponentes: 0,
         estadocomponentes: 0,
-        estadooperacionequipo_cosv: 81,
+        estadooperacionequipo_cosv: 35,
     });
 
     const agregarActividad = (e) => {
@@ -157,7 +157,7 @@ function CrearActividad(props) {
                     finaltransporte_cosv: fechainicial,
                     tiempotransporte_cosv: 0,
                     horometro_cosv: 0,
-                    estado_cosv: 23,
+                    estado_cosv: 12,
                     idcomponente: 0,
                     seriecomponente: 0,
                     voltajecomponente: 0,
@@ -166,7 +166,7 @@ function CrearActividad(props) {
                     celdasreferenciacomponente: 0,
                     cofreseriecomponentes: 0,
                     estadocomponentes: 0,
-                    estadooperacionequipo_cosv: 81,
+                    estadooperacionequipo_cosv: 35,
                 }])
             ))
         }

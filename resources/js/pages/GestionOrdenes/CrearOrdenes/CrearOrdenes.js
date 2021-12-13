@@ -190,7 +190,7 @@ function CrearOrdenes(props) {
   const horaactual = Moment(new Date()).format('HH:mm:ss');
   const fechatransporte = Moment(new Date()).format('2001-01-01 00:00:00');
 
-  const [estado, setEstado] = useState(21);
+  const [estado, setEstado] = useState(10);
   const [asignaOperario, setAsignaOperario] = useState(0);
   const [cliente, setCliente] = useState(0);
   const [contacto, setContacto] = useState(0);
@@ -652,7 +652,7 @@ function CrearOrdenes(props) {
         let estadoope = 21;
 
         if (asignaOperario > 1) {
-          estadoope = 23
+          estadoope = 12
         }
 
         cliente ? (
@@ -856,7 +856,7 @@ function CrearOrdenes(props) {
 
     if (formOk) {
       {
-        let estadoope = 21;
+        let estadoope = 23;
         let actualizaoperario = 0;
 
         if (ordenSeleccionado.operario_otr !== 0) {

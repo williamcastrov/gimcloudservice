@@ -36,9 +36,9 @@ class RegistroLlamadasController extends Controller
   
           try {
   
-            $data = DB::select("SELECT t0.*, t1.*, t2.nombre_est
-            FROM registrollamadas t0 INNER JOIN interlocutores_cli as t1 INNER JOIN estados as t2
-            WHERE t0.cliente_rll = t1.id_cli and t0.estadollamada_rll = t2.id_est");
+            $data = DB::select("SELECT t0.*, t1.*, t2.nombre_est, t3.nombre_ciu
+            FROM registrollamadas t0 INNER JOIN interlocutores_cli as t1 INNER JOIN estados as t2 INNER JOIN ciudades as t3
+            WHERE t0.cliente_rll = t1.id_cli and t0.estadollamada_rll = t2.id_est and t1.ciudad_cli = t3.id_ciu");
   
             $response['data'] = $data;
             $response['message'] = "load successful";

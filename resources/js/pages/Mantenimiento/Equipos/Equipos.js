@@ -18,7 +18,7 @@ import empresasServices from "../../../services/Empresa";
 import estadosServices from "../../../services/Parameters/Estados";
 import marcasServices from "../../../services/Mantenimiento/Marcas";
 import frecuenciasServices from "../../../services/Mantenimiento/Frecuencias";
-import propietariosServices from "../../../services/Interlocutores/Proveedores";
+import propietariosServices from "../../../services/Interlocutores/Clientes";
 import gruposequiposServices from "../../../services/Mantenimiento/GruposEquipos";
 import subgruposequiposServices from "../../../services/Mantenimiento/SubGruposPartes";
 import equiposServices from "../../../services/Mantenimiento/Equipos";
@@ -36,7 +36,7 @@ import ConsultarFotosEquipos from "../../Images/FotosEquipos/ConsultarFotosEquip
 const useStyles = makeStyles((theme) => ({
   modal: {
     position: 'absolute',
-    width: 700,
+    width: 750,
     backgroundColor: theme.palette.background.paper,
     border: '2px solid #000',
     boxShadow: theme.shadows[5],
@@ -58,15 +58,16 @@ const useStyles = makeStyles((theme) => ({
   },
   formControl: {
     margin: theme.spacing(0),
-    minWidth: 300,
+    minWidth: 325,
+    maxWidth: 325,
   },
   formControlEstados: {
     margin: theme.spacing(0),
-    minWidth: 150,
+    minWidth: 200,
   },
   formControlManeja: {
     margin: theme.spacing(0),
-    minWidth: 140,
+    minWidth: 495,
   },
   extendedIcon: {
     marginRight: theme.spacing(1),
@@ -319,9 +320,9 @@ function RegistraEquipos(props) {
 
   useEffect(() => {
     async function fetchDataPropietarios() {
-      const res = await propietariosServices.listProveedores();
+      const res = await propietariosServices.listClientes();
       setListarPropietarios(res.data)
-      //console.log(res.data);
+      console.log(res.data);
     }
     fetchDataPropietarios();
   }, [])
@@ -415,8 +416,8 @@ function RegistraEquipos(props) {
 
       
       if (grabar) {
-        console.log("EQUIPO SELECCIONADO : ", equiposSeleccionado)
-        console.log("ACTIVO SELECCIONADO : ", activoSeleccionado)
+        //console.log("EQUIPO SELECCIONADO : ", equiposSeleccionado)
+        //console.log("ACTIVO SELECCIONADO : ", activoSeleccionado)
 
         const res = await equiposServices.save(equiposSeleccionado[0]);
 
@@ -506,7 +507,7 @@ function RegistraEquipos(props) {
       errors.valoradquisicion_equ = true;
       formOk = false;
     }
-
+/*
     if (!equiposSeleccionado.estadocontable_equ) {
       alert("9");
       errors.estadocontable_equ = true;
@@ -548,7 +549,7 @@ function RegistraEquipos(props) {
       errors.manejamarcacion_equ = true;
       formOk = false;
     }
-
+*/
     setFormError(errors);
 
     if (!formOk) {
@@ -581,7 +582,7 @@ function RegistraEquipos(props) {
         ctadepreciacion_equ: equiposSeleccionado.ctadepreciacion_equ,
         manejamatricula_equ: equiposSeleccionado.manejamatricula_equ,
         manejamarcacion_equ: equiposSeleccionado.manejamatricula_equ,
-        fecharetornaequipo_equ: "",
+        fecharetornaequipo_equ:  equiposSeleccionado.fecharetornaequipo_equ,
         combogrupo_equ: 0,
         datoauxiliarpropietario_equ: equiposSeleccionado.datoauxiliarpropietario_equ,
         datoauxiliaradmon_equ: equiposSeleccionado.datoauxiliaradmon_equ,
@@ -766,63 +767,8 @@ function RegistraEquipos(props) {
           <TextField name="codigo_equ" label="Codigo Equipo" fullWidth defaultValue={consecutivo}
             onChange={(e) => handleChange(e.target.value)} />
         </Grid>
-        <Grid item xs={12} md={3}>
-          <FormControl className={styles.formControlManeja}>
-            <InputLabel id="idselectFrecuencia">Frecuencia</InputLabel>
-            <Select
-              labelId="selectFrecuencia"
-              name="frecuencia_equ"
-              id="idselectFrecuencia"
-              fullWidth
-              defaultValue={frecuencia}
-              onChange={handleChange}
-            >
-              <MenuItem value=""> <em>None</em> </MenuItem>
-              {
-                listarFrecuencias.map((itemselect) => {
-                  return (
-                    <MenuItem value={itemselect.id_fre}>{itemselect.descripcion_fre}</MenuItem>
-                  )
-                })
-              }
-            </Select>
-          </FormControl>
-        </Grid>
-        <Grid item xs={12} md={3}>
-          <FormControl className={styles.formControlManeja}>
-            <InputLabel id="idselectMatricula" >Matricula</InputLabel>
-            <Select
-              labelId="selecMatricula"
-              name="manejamatricula_equ"
-              id="idselectMatricula"
-              fullWidth
-              onChange={handleChange}
-            >
-
-              <MenuItem value=""> <em>None</em> </MenuItem>
-              <MenuItem value="S">Matricula Si</MenuItem>
-              <MenuItem value="N">Matricula No</MenuItem>
-            </Select>
-          </FormControl>
-        </Grid>
-        <Grid item xs={12} md={3}>
-          <FormControl className={styles.formControlManeja}>
-            <InputLabel id="idselectDNI" >Marcación</InputLabel>
-            <Select
-              labelId="selectDNI"
-              name="manejamarcacion_equ"
-              id="idselectDNI"
-              fullWidth
-              onChange={handleChange}
-            >
-              <MenuItem value=""> <em>None</em> </MenuItem>
-              <MenuItem value="S">Marcado Si</MenuItem>
-              <MenuItem value="N">Marcado No</MenuItem>
-            </Select>
-          </FormControl>
-        </Grid>
         <Grid item xs={12} md={6}>
-          <FormControl className={styles.formControl}>
+          <FormControl className={styles.formControlManeja}>
             <InputLabel id="idselectPropietario">Propietario</InputLabel>
             <Select
               labelId="selectPropietario"
@@ -835,7 +781,7 @@ function RegistraEquipos(props) {
               {
                 listarPropietarios.map((itemselect) => {
                   return (
-                    <MenuItem value={itemselect.id_int}>{itemselect.razonsocial_int}</MenuItem>
+                    <MenuItem value={itemselect.id_cli}>{itemselect.razonsocial_cli}</MenuItem>
                   )
                 })
               }
@@ -884,8 +830,8 @@ function RegistraEquipos(props) {
             </Select>
           </FormControl>
         </Grid>
-        <Grid item xs={12} md={6}>
-          <FormControl className={styles.formControl}>
+        <Grid item xs={12} md={4}>
+          <FormControl className={styles.formControlEstados}>
             <InputLabel id="idselectMarca">Marca</InputLabel>
             <Select
               labelId="selectMarca"
@@ -906,8 +852,11 @@ function RegistraEquipos(props) {
           </FormControl>
         </Grid>
         <Grid item xs={12} md={4}> <TextField name="antiguedad_equ" label="Antiguedad" fullWidth onChange={handleChange} /> </Grid>
-        <Grid item xs={12} md={4}> <TextField name="ctacontable_equ" label="Cuenta Contable" fullWidth onChange={handleChange} /> </Grid>
-        <Grid item xs={12} md={4}> <TextField name="ctadepreciacion_equ" label="Cuenta Depreciación" fullWidth onChange={handleChange} /> </Grid>
+        <Grid item xs={12} md={4}>
+            <TextField type="date" InputLabelProps={{ shrink: true }} name="fecharetornaequipo_equ"
+              defaultValue={Moment(equiposSeleccionado.fecharetornaequipo_equ).format('YYYY-MM-DD')} label="Fecha Venta"
+              fullWidth onChange={handleChange} />
+        </Grid>
         <Grid item xs={12} md={8}> <TextField name="descripcion_equ" label="Descripción del Equipo"
           fullWidth onChange={handleChange} />
         </Grid>
@@ -916,123 +865,6 @@ function RegistraEquipos(props) {
             InputLabelProps={{ shrink: true }} InputProps={{ inputComponent: NumberFormatCustom, }}
             onChange={handleChange}
           />
-        </Grid>
-        <Grid item xs={12} md={3}>
-          <FormControl className={styles.formControlEstados}>
-            <InputLabel id="idselectEstadoCalidad">Estado Calidad</InputLabel>
-            <Select
-              labelId="selectEstadoCalidad"
-              name="estadocalidad_equ"
-              id="idselectEstadoCalidad"
-              fullWidth
-              onChange={handleChange}
-            >
-              <MenuItem value=""> <em>None</em> </MenuItem>
-              {
-                listarEstadosCalidad.map((itemselect) => {
-                  return (
-                    <MenuItem value={itemselect.id_estcal}>{itemselect.nombre_estcal}</MenuItem>
-                  )
-                })
-              }
-            </Select>
-          </FormControl>
-        </Grid>
-        <Grid item xs={12} md={3}>
-          <FormControl className={styles.formControlEstados}>
-            <InputLabel id="idselectEstadoContable">Estado del Equipo</InputLabel>
-            <Select
-              labelId="selectEstadoContable"
-              name="estadocontable_equ"
-              id="idselectEstadoContable"
-              fullWidth
-              onChange={handleChange}
-            >
-              <MenuItem value=""> <em>None</em> </MenuItem>
-              {
-                listarEstados && listarEstados.map((itemselect) => {
-                  return (
-                    <MenuItem value={itemselect.id_est}>{itemselect.nombre_est}</MenuItem>
-                  )
-                })
-              }
-            </Select>
-          </FormControl>
-        </Grid>
-        <Grid item xs={12} md={3}>
-          <FormControl className={styles.formControlEstados}>
-            <InputLabel id="idselectEstadoCliente">Estado del Cliente</InputLabel>
-            <Select
-              labelId="selectEstadoCliente"
-              name="estadocliente_equ"
-              id="idselectEstadoCliente"
-              fullWidth
-              onChange={handleChange}
-            >
-              <MenuItem value=""> <em>None</em> </MenuItem>
-              {
-                listarEstadosClientes.map((itemselect) => {
-                  return (
-                    <MenuItem value={itemselect.id_estcli}>{itemselect.nombre_estcli}</MenuItem>
-                  )
-                })
-              }
-            </Select>
-          </FormControl>
-        </Grid>
-        <Grid item xs={12} md={3}>
-          <FormControl className={styles.formControlEstados}>
-            <InputLabel id="idselectEstadoMtto">Estado de Mantenimiento</InputLabel>
-            <Select
-              labelId="selectEstadoMtto"
-              name="estadomtto_equ"
-              id="idselectEstadoMantenimiento"
-              fullWidth
-              onChange={handleChange}
-            >
-              <MenuItem value=""> <em>None</em> </MenuItem>
-              {
-                listarEstadosMtto.map((itemselect) => {
-                  return (
-                    <MenuItem value={itemselect.id_estmtto}>{itemselect.nombre_estmtto}</MenuItem>
-                  )
-                })
-              }
-            </Select>
-          </FormControl>
-        </Grid>
-        <Grid item xs={12} md={4}> <TextField name="vidautil" label="Vida Util Activo"
-          fullWidth onChange={(e) => setVidaUtilAct(e.target.value)} />
-        </Grid>
-        <Grid item xs={12} md={4}>
-          <TextField className={styles.inputMaterial} name="valorresidual" label="Valor Residual" fullWidth
-            InputLabelProps={{ shrink: true }} InputProps={{ inputComponent: NumberFormatCustom, }}
-            onChange={(e) => setValorResidualAct(e.target.value)}
-          />
-        </Grid>
-        <Grid item xs={12} md={4}>
-          <TextField className={styles.inputMaterial} name="cuotadepreciadion" label="Cuota Depreciación" fullWidth
-            InputLabelProps={{ shrink: true }} InputProps={{ inputComponent: NumberFormatCustom, }}
-            onChange={(e) => setCuotaDepreciacionAct(e.target.value)}
-          />
-        </Grid>
-        <Grid item xs={12} md={6}> <TextField name="datoauxiliarpropietario_equ" label="Dato Auxiliar Propietario"
-          fullWidth onChange={handleChange} />
-        </Grid>
-        <Grid item xs={12} md={6}> <TextField name="datoauxiliaradmon_equ" label="Dato Auxiliar Admon"
-          fullWidth onChange={handleChange} />
-        </Grid>
-        <Grid item xs={12} md={6}> <TextField name="datoauxiliarcontabilidad_equ" label="Dato Auxiliar Contabilidad"
-          fullWidth onChange={handleChange} />
-        </Grid>
-        <Grid item xs={12} md={6}> <TextField name="datoauxiliaralza_equ" label="Dato Auxiliar Alza"
-          fullWidth onChange={handleChange} />
-        </Grid>
-        <Grid item xs={12} md={6}> <TextField name="datoauxiliaraquimejora_equ" label="Dato RPTO/Mejora"
-          fullWidth onChange={handleChange} />
-        </Grid>
-        <Grid item xs={12} md={6}> <TextField name="datoauxiliarcalidad_equ" label="Dato de Calidad"
-          fullWidth onChange={handleChange} />
         </Grid>
       </Grid>
       <div align="right">
@@ -1049,64 +881,8 @@ function RegistraEquipos(props) {
         <Grid item xs={12} md={3}> <TextField name="codigo_equ" label="Codigo Equipo"
           fullWidth onChange={handleChange} value={equiposSeleccionado && equiposSeleccionado.codigo_equ} />
         </Grid>
-        <Grid item xs={12} md={3}>
-          <FormControl className={styles.formControlManeja}>
-            <InputLabel id="idselectFrecuencia">Frecuencia</InputLabel>
-            <Select
-              labelId="selectFrecuencia"
-              name="frecuencia_equ"
-              id="idselectFrecuencia"
-              fullWidth
-              onChange={handleChange}
-              value={equiposSeleccionado && equiposSeleccionado.frecuencia_equ}
-            >
-              <MenuItem value=""> <em>None</em> </MenuItem>
-              {
-                listarFrecuencias.map((itemselect) => {
-                  return (
-                    <MenuItem value={itemselect.id_fre}>{itemselect.descripcion_fre}</MenuItem>
-                  )
-                })
-              }
-            </Select>
-          </FormControl>
-        </Grid>
-        <Grid item xs={12} md={3}>
-          <FormControl className={styles.formControlManeja}>
-            <InputLabel id="idselectMatricula" >Maneja Matricula</InputLabel>
-            <Select
-              labelId="selecMatricula"
-              name="manejamatricula_equ"
-              id="idselectMatricula"
-              fullWidth
-              onChange={handleChange}
-              value={equiposSeleccionado && equiposSeleccionado.manejamatricula_equ}
-            >
-              <MenuItem value=""> <em>None</em> </MenuItem>
-              <MenuItem value="S">Maneja Matricula S</MenuItem>
-              <MenuItem value="N">Maneja Matricula N</MenuItem>
-            </Select>
-          </FormControl>
-        </Grid>
-        <Grid item xs={12} md={3}>
-          <FormControl className={styles.formControlManeja}>
-            <InputLabel id="idselectDNI" >Tiene Marcación</InputLabel>
-            <Select
-              labelId="selectDNI"
-              name="manejamarcacion_equ"
-              id="idselectDNI"
-              fullWidth
-              onChange={handleChange}
-              value={equiposSeleccionado && equiposSeleccionado.manejamarcacion_equ}
-            >
-              <MenuItem value=""> <em>None</em> </MenuItem>
-              <MenuItem value="S">Esta Marcado</MenuItem>
-              <MenuItem value="N">No esta Marcado</MenuItem>
-            </Select>
-          </FormControl>
-        </Grid>
         <Grid item xs={12} md={6}>
-          <FormControl className={styles.formControl}>
+          <FormControl className={styles.formControlManeja}>
             <InputLabel id="idselectPropietario">Propietario</InputLabel>
             <Select
               labelId="selectPropietario"
@@ -1120,7 +896,7 @@ function RegistraEquipos(props) {
               {
                 listarPropietarios.map((itemselect) => {
                   return (
-                    <MenuItem value={itemselect.id_int}>{itemselect.razonsocial_int}</MenuItem>
+                    <MenuItem value={itemselect.id_cli}>{itemselect.razonsocial_cli}</MenuItem>
                   )
                 })
               }
@@ -1172,7 +948,7 @@ function RegistraEquipos(props) {
           </FormControl>
         </Grid>
         <Grid item xs={12} md={4}>
-          <FormControl className={styles.formControl}>
+          <FormControl className={styles.formControlEstados}>
             <InputLabel id="idselectMarca">Marca</InputLabel>
             <Select
               labelId="selectMarca"
@@ -1193,16 +969,14 @@ function RegistraEquipos(props) {
             </Select>
           </FormControl>
         </Grid>
-        <Grid item xs={12} md={3}>
+        <Grid item xs={12} md={4}>
           <TextField name="antiguedad_equ" label="Antiguedad" fullWidth onChange={handleChange}
             value={equiposSeleccionado && equiposSeleccionado.antiguedad_equ} />
         </Grid>
-        <Grid item xs={12} md={3}>
-          <TextField name="ctacontable_equ" label="Cuenta Contable" fullWidth onChange={handleChange}
-            value={equiposSeleccionado && equiposSeleccionado.ctacontable_equ} />
-        </Grid>
-        <Grid item xs={12} md={3}> <TextField name="ctadepreciacion_equ" label="Cuenta Depreciación" fullWidth onChange={handleChange}
-          value={equiposSeleccionado && equiposSeleccionado.ctadepreciacion_equ} />
+        <Grid item xs={12} md={4}>
+            <TextField type="date" InputLabelProps={{ shrink: true }} name="fecharetornaequipo_equ"
+              defaultValue={Moment(equiposSeleccionado.fecharetornaequipo_equ).format('YYYY-MM-DD')} label="Fecha Venta"
+              fullWidth onChange={handleChange} />
         </Grid>
         <Grid item xs={12} md={3}>
           <TextField className={styles.inputMaterial} name="valoradquisicion_equ" label="Valor Equipo" fullWidth
@@ -1210,119 +984,8 @@ function RegistraEquipos(props) {
             onChange={handleChange} value={equiposSeleccionado && equiposSeleccionado.valoradquisicion_equ}
           />
         </Grid>
-        <Grid item xs={12} md={8}> <TextField name="descripcion_equ" label="Descripción del Equipo"
+        <Grid item xs={12} md={9}> <TextField name="descripcion_equ" label="Descripción del Equipo"
           fullWidth onChange={handleChange} value={equiposSeleccionado && equiposSeleccionado.descripcion_equ} />
-        </Grid>
-        <Grid item xs={12} md={4}>
-            <TextField type="date" InputLabelProps={{ shrink: true }} name="fecharetornaequipo_equ" disabled
-              defaultValue={Moment(equiposSeleccionado.fecharetornaequipo_equ).format('YYYY-MM-DD')} label="Fecha Retorna Maquina"
-              fullWidth onChange={handleChange} />
-        </Grid>
-        <Grid item xs={12} md={3}>
-          <FormControl className={styles.formControlEstados}>
-            <InputLabel id="idselectEstadoCalidad">Estado Calidad</InputLabel>
-            <Select
-              labelId="selectEstadoCalidad"
-              name="estadocalidad_equ"
-              id="idselectEstadoCalidad"
-              fullWidth
-              onChange={handleChange}
-              value={equiposSeleccionado && equiposSeleccionado.estadocalidad_equ}
-            >
-              <MenuItem value=""> <em>None</em> </MenuItem>
-              {
-                listarEstadosCalidad.map((itemselect) => {
-                  return (
-                    <MenuItem value={itemselect.id_estcal}>{itemselect.nombre_estcal}</MenuItem>
-                  )
-                })
-              }
-            </Select>
-          </FormControl>
-        </Grid>
-        <Grid item xs={12} md={3}>
-          <FormControl className={styles.formControlEstados}>
-            <InputLabel id="idselectEstadoContable">Estado del Equipo</InputLabel>
-            <Select
-              labelId="selectEstadoContable"
-              name="estadocontable_equ"
-              id="idselectEstadoContable"
-              fullWidth
-              onChange={handleChange}
-              value={equiposSeleccionado && equiposSeleccionado.estadocontable_equ}
-            >
-              <MenuItem value=""> <em>None</em> </MenuItem>
-              {
-                listarEstados && listarEstados.map((itemselect) => {
-                  return (
-                    <MenuItem value={itemselect.id_est}>{itemselect.nombre_est}</MenuItem>
-                  )
-                })
-              }
-            </Select>
-          </FormControl>
-        </Grid>
-        <Grid item xs={12} md={3}>
-          <FormControl className={styles.formControlEstados}>
-            <InputLabel id="idselectEstadoCliente">Estado del Cliente</InputLabel>
-            <Select
-              labelId="selectEstadoCliente"
-              name="estadocliente_equ"
-              id="idselectEstadoCliente"
-              fullWidth
-              onChange={handleChange}
-              value={equiposSeleccionado && equiposSeleccionado.estadocliente_equ}
-            >
-              <MenuItem value=""> <em>None</em> </MenuItem>
-              {
-                listarEstadosClientes.map((itemselect) => {
-                  return (
-                    <MenuItem value={itemselect.id_estcli}>{itemselect.nombre_estcli}</MenuItem>
-                  )
-                })
-              }
-            </Select>
-          </FormControl>
-        </Grid>
-        <Grid item xs={12} md={3}>
-          <FormControl className={styles.formControlEstados}>
-            <InputLabel id="idselectEstadoMtto">Estado de Mantenimiento</InputLabel>
-            <Select
-              labelId="selectEstadoMtto"
-              name="estadomtto_equ"
-              id="idselectEstadoMantenimiento"
-              fullWidth
-              onChange={handleChange}
-              value={equiposSeleccionado && equiposSeleccionado.estadomtto_equ}
-            >
-              <MenuItem value=""> <em>None</em> </MenuItem>
-              {
-                listarEstadosMtto.map((itemselect) => {
-                  return (
-                    <MenuItem value={itemselect.id_estmtto}>{itemselect.nombre_estmtto}</MenuItem>
-                  )
-                })
-              }
-            </Select>
-          </FormControl>
-        </Grid>
-        <Grid item xs={12} md={6}> <TextField name="datoauxiliarpropietario_equ" label="Dato Auxiliar Propietario"
-          fullWidth onChange={handleChange} value={equiposSeleccionado && equiposSeleccionado.datoauxiliarpropietario_equ} />
-        </Grid>
-        <Grid item xs={12} md={6}> <TextField name="datoauxiliaradmon_equ" label="Dato Auxiliar Admon"
-          fullWidth onChange={handleChange} value={equiposSeleccionado && equiposSeleccionado.datoauxiliaradmon_equ} />
-        </Grid>
-        <Grid item xs={12} md={6}> <TextField name="datoauxiliarcontabilidad_equ" label="Dato Auxiliar Contabilidad"
-          fullWidth onChange={handleChange}  value={equiposSeleccionado && equiposSeleccionado.datoauxiliarcontabilidad_equ} />
-        </Grid>
-        <Grid item xs={12} md={6}> <TextField name="datoauxiliaralza_equ" label="Dato Auxiliar Alza"
-          fullWidth onChange={handleChange}  value={equiposSeleccionado && equiposSeleccionado.datoauxiliaralza_equ} />
-        </Grid>
-        <Grid item xs={12} md={6}> <TextField name="datoauxiliaraquimejora_equ" label="Dato RPTO/Mejora"
-          fullWidth onChange={handleChange} value={equiposSeleccionado && equiposSeleccionado.datoauxiliaraquimejora_equ} />
-        </Grid>
-        <Grid item xs={12} md={6}> <TextField name="datoauxiliarcalidad_equ" label="Dato de Calidad"
-          fullWidth onChange={handleChange} value={equiposSeleccionado && equiposSeleccionado.datoauxiliarcalidad_equ}  />
         </Grid>
       </Grid>
       <div align="right">
@@ -1411,7 +1074,7 @@ function RegistraEquipos(props) {
               {
                 listarPropietarios.map((itemselect) => {
                   return (
-                    <MenuItem value={itemselect.id_int}>{itemselect.razonsocial_int}</MenuItem>
+                    <MenuItem value={itemselect.id_cli}>{itemselect.razonsocial_cli}</MenuItem>
                   )
                 })
               }

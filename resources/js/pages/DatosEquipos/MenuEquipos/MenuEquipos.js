@@ -65,10 +65,6 @@ export default function MenuEquipos(props) {
   const fecha = new Date();
   const ano = fecha.getFullYear();
 
-  const [listGarantia, setListGarantia] = useState([]);
-  const [modalInsertar, setModalInsertar] = useState(false);
-  const [modalEditar, setModalEditar] = useState(false);
-
   const [modalExtrasEquipos, setModalExtrasEquipos] = useState(false);
   const [modalDatosEquipos, setModalDatosEquipos] = useState(false);
   const [modalGarantias, setModalGarantias] = useState(false);
@@ -237,24 +233,6 @@ export default function MenuEquipos(props) {
           rotate={true}
           styles={{ backgroundColor: darkColors.grey, color: lightColors.white }}
           onClick={() => setModalHojaVida(true)} ><RecentActorsIcon />
-        </Button>
-        <Button
-          tooltip="Componentes x Equipo"
-          rotate={true}
-          styles={{ backgroundColor: darkColors.teal, color: lightColors.white }}
-          onClick={() => setModalComponentesEquipos(true)} >< SettingsInputComponentIcon />
-        </Button>
-        <Button
-          tooltip="Información Seguros"
-          rotate={true}
-          styles={{ backgroundColor: darkColors.lighterRed, color: lightColors.white }}
-          onClick={() => setModalSeguros(true)} ><LockIcon />
-        </Button>
-        <Button
-          tooltip="Accesorios Adicionales"
-          rotate={true}
-          styles={{ backgroundColor: darkColors.orange, color: lightColors.white }}
-          onClick={() => setModalExtrasEquipos(true)} ><CategoryIcon />
         </Button>
         <Button
           tooltip="Ubicación"

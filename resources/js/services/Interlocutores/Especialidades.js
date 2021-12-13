@@ -20,6 +20,33 @@ especialidades.listEspecialidades = async () => {
     return res;
 }
 
+especialidades.listEspecialidadesproveedores = async () => {
+    const urlList = baseUrl+"/listar_especialidadesproveedores"
+    const res = await axios.get(urlList)
+    .then(response=>{ return response.data; })
+    .catch(error=>{ return error; })
+   
+    return res;
+}
+
+especialidades.listEspecialidadesclientes = async () => {
+    const urlList = baseUrl+"/listar_especialidadesclientes"
+    const res = await axios.get(urlList)
+    .then(response=>{ return response.data; })
+    .catch(error=>{ return error; })
+   
+    return res;
+}
+
+especialidades.listEspecialidadesempleados = async () => {
+    const urlList = baseUrl+"/listar_especialidadesempleados"
+    const res = await axios.get(urlList)
+    .then(response=>{ return response.data; })
+    .catch(error=>{ return error; })
+   
+    return res;
+}
+
 especialidades.update = async (data) => {
     console.log(data);
     const urlUpdate = baseUrl+"/update/"+data.id_esp

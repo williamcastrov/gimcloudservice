@@ -94,7 +94,7 @@ function ActivosRenta() {
                 <Button className={styles.button} color="primary" >
                     <ReactHTMLTableToExcel
                         table="emp"
-                        filename="Activos Renta"
+                        filename="Equipos Vendidos"
                         sheet="Sheet"
                         buttonText="Exportar a Excel"
                     />
@@ -103,9 +103,8 @@ function ActivosRenta() {
             <table id="emp" className="table">
                 <thead>
                     <tr>
-                        <th>Item Seguro</th>
-                        <th>N. Importación</th>
-                        <th>Fecha</th>
+                        <th>Fecha Informe</th>
+                        <th>Fecha Venta</th>
                         <th>Propietario</th>
                         <th>Estado</th>
                         <th>ID Interno</th>
@@ -114,13 +113,14 @@ function ActivosRenta() {
                         <th>Cliente</th>
                         <th>Direccion</th>
                         <th>Ciudad</th>
+                        <th>Telefono</th>
+                        <th>Email</th>
                         <th>Referencia</th>
                         <th>Descripción</th> 
                         <th>Marca</th>
                         <th>Modelo</th>
                         <th>Serie</th> 
-                        <th>Año Fabicación</th> 
-                        <th>Cuenta Contable</th> 
+                        <th>Año Fabricación</th>  
                     </tr>
                 </thead>
                 <tbody>
@@ -128,9 +128,8 @@ function ActivosRenta() {
                         listarEquipos && listarEquipos.map((equipos, index) => {
                             return (
                                 <tr>
-                                    <td>{equipos.IDinterno_seg}</td>
-                                    <td>{equipos.declaracionimportacion_seg}</td>
                                     <td>{fechaactual}</td>
+                                    <td>{equipos.fecharetornaequipo_equ}</td>
                                     <td>{equipos.razonsocial_int}</td>
                                     <td>{equipos.nombre_estcli}</td>
                                     <td>{equipos.codigo_equ}</td>
@@ -138,16 +137,15 @@ function ActivosRenta() {
                                     <td>{equipos.descripcion_sgre}</td>
                                     <td>{equipos.cliente_ubi}</td>
                                     <td>{equipos.direccion_ubi}</td>
-                                    <td>{equipos.ciudad_ubi}</td>
+                                    <td>{equipos.nombre_ciu}</td>
+                                    <td>{equipos.telefono_cli}</td>
+                                    <td>{equipos.email_cli}</td>
                                     <td>{equipos.referencia_dequ}</td>
                                     <td>{equipos.descripcion_equ}</td>
                                     <td>{equipos.descripcion_mar}</td>
                                     <td>{equipos.modelo_dequ}</td>
                                     <td>{equipos.serie_dequ}</td>
-                                    <td>{equipos.annofabricacion_dequ}</td>
-                                    <td>{equipos.ctacontable_equ}</td>
-
-                                    
+                                    <td>{equipos.annofabricacion_dequ}</td> 
                                 </tr>
                             )
                         })

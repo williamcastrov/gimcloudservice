@@ -150,7 +150,7 @@ function Proveedores() {
 
   useEffect(() => {
     async function fetchDataEspecialidades() {
-      const res = await especialidadesServices.listEspecialidades();
+      const res = await especialidadesServices.listEspecialidadesproveedores();
       setListarEspecialidades(res.data)
       //console.log(res.data);
     }

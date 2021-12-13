@@ -141,7 +141,7 @@ function Clientes() {
 
   useEffect(() => {
     async function fetchDataEspecialidades() {
-      const res = await especialidadesServices.listEspecialidades();
+      const res = await especialidadesServices.listEspecialidadesclientes();
       setListarEspecialidades(res.data)
       //console.log(res.data);
     }
