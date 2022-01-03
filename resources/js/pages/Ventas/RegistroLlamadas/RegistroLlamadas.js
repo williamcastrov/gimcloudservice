@@ -4,6 +4,7 @@ import MaterialTable from "material-table";
 import { Modal, TextField, Button, Select, MenuItem, FormControl, InputLabel, Typography, Grid } from "@material-ui/core";
 import { green, blue, blueGrey, red } from '@material-ui/core/colors';
 import { makeStyles } from "@material-ui/core/styles";
+import FileCopyIcon from '@material-ui/icons/FileCopy';
 import SaveIcon from '@material-ui/icons/Save';
 import Moment from 'moment';
 import swal from 'sweetalert';
@@ -69,15 +70,17 @@ function RegistroLlamadas() {
   const [listEstados, setListEstados] = useState([]);
   const [listarClientes, setListarClientes] = useState([]);
   const [actualiza, setActualiza] = useState(false);
+  const [duplica, setDuplica] = useState(false);
 
   const fechaactual = Moment(new Date()).format('YYYY-MM-DD HH:mm:ss');
   const [registroLlamadasSeleccionado, setRegistroLlamadasSeleccionado] = useState({
     id_rll: "",
+    consecutivo_rll: 0,
     cliente_rll: "",
     motivollamada_rll: "",
     pedientellamada_rll: "",
     comentarios_rll: "",
-    fecha_rll: "",
+    fecha_rll: fechaactual,
     estadollamada_rll: "",
   })
 
@@ -123,6 +126,61 @@ function RegistroLlamadas() {
     setRegistroLlamadasSeleccionado(llamada);
     (caso === "Editar") ? abrirCerrarModalEditar() : abrirCerrarModalEliminar()
   }
+
+  const duplicarLlamada = (llamada, caso) => {
+    console.log("LLAMADA : ", llamada);
+    
+    let consecutivo;
+    if(llamada.consecutivo_rll === 0){
+       consecutivo = llamada.consecutivo_rll + 1;
+    }else{
+      consecutivo = llamada.consecutivo_rll;
+    }
+
+    //var d = Date.parse(llamada.fecha_rll);
+    //console.log("VALOR FECHA : ", d)
+    {
+      setRegistroLlamadasSeleccionado([{
+        id_rll: llamada.id_rll,
+        consecutivo_rll: consecutivo,
+        cliente_rll: llamada.cliente_rll,
+        motivollamada_rll: llamada.motivollamada_rll,
+        pedientellamada_rll: llamada.pedientellamada_rll,
+        comentarios_rll: llamada.comentarios_rll,
+        fecha_rll: fechaactual,
+        estadollamada_rll: llamada.estadollamada_rll,
+      }])
+    }
+
+    (caso === "Editar") ? duplicaRegistroLlamada() : duplicaRegistroLlamada()
+  }
+
+  const duplicaRegistroLlamada = async () => {
+     setDuplica(true);
+  }
+
+  useEffect(() => {
+    if(duplica){
+
+      //console.log("REGISTRO DUPLICADO : ", registroLlamadasSeleccionado[0]);
+      async function seguimiento() {
+        const res = await registrollamadasServices.save(registroLlamadasSeleccionado[0]);
+
+        if (res.success) {
+          swal("Registro Llamadas", "Registro Seguimiento Llamada Creado de forma Correcta!", "success", { button: "Aceptar" });
+          console.log(res.message)
+          //abrirCerrarModalInsertar();
+        } else {
+          swal("Registro Llamadas", "Error Creando Seguimiento al Registro de Llamadas!", "error", { button: "Aceptar" });
+          console.log(res.message);
+          //abrirCerrarModalInsertar();
+        }
+      }
+      seguimiento();
+      setDuplica(false);
+      setActualiza(true);
+    }
+  }, [duplica])
 
   const abrirCerrarModalInsertar = () => {
     setModalInsertar(!modalInsertar);
@@ -215,7 +273,7 @@ function RegistroLlamadas() {
     setFormError(errors);
 
     if (formOk) {
-console.log("DATA REGISTRO LLAMADA : ", registroLlamadasSeleccionado)
+      console.log("DATA REGISTRO LLAMADA : ", registroLlamadasSeleccionado)
       const res = await registrollamadasServices.update(registroLlamadasSeleccionado);
 
       if (res.success) {
@@ -254,6 +312,14 @@ console.log("DATA REGISTRO LLAMADA : ", registroLlamadasSeleccionado)
   }
   // "string","boolean","numeric","date","datetime","time","currency"
   const columnas = [
+    {
+      title: 'ID',
+      field: 'id_rll'
+    },
+    {
+      title: 'Consecutivo',
+      field: 'consecutivo_rll'
+    },
     {
       title: 'Cliente',
       field: 'razonsocial_cli'
@@ -455,6 +521,11 @@ console.log("DATA REGISTRO LLAMADA : ", registroLlamadasSeleccionado)
             icon: 'edit',
             tooltip: 'Editar Llamada',
             onClick: (event, rowData) => seleccionarLlamada(rowData, "Editar")
+          },
+          {
+            icon: FileCopyIcon,
+            tooltip: 'Duplicar Registro',
+            onClick: (event, rowData) => duplicarLlamada(rowData, "Duplicar")
           },
           {
             icon: 'delete',

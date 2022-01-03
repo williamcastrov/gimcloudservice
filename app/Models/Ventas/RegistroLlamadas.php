@@ -13,6 +13,7 @@ class RegistroLlamadas extends Model
     protected $primaryKey = "id_rll";
 
     protected $fillable = [
+        'consecutivo_rll',
         'cliente_rll',
         'motivollamada_rll',
         'pedientellamada_rll',

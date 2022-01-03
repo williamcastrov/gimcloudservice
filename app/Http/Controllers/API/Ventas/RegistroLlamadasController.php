@@ -12,6 +12,7 @@ class RegistroLlamadasController extends Controller
     //
     public function create(Request $request){
         try {
+            $insert['consecutivo_rll']     = $request['consecutivo_rll'];
             $insert['cliente_rll']         = $request['cliente_rll'];
             $insert['motivollamada_rll']   = $request['motivollamada_rll'];
             $insert['pedientellamada_rll'] = $request['pedientellamada_rll'];
@@ -102,6 +103,7 @@ class RegistroLlamadasController extends Controller
   
         public function update(Request $request, $id_rll){
           try {
+            $data['consecutivo_rll']     = $request['consecutivo_rll'];
             $data['id_rll']              = $request['id_rll'];
             $data['cliente_rll']         = $request['cliente_rll'];
             $data['motivollamada_rll']   = $request['motivollamada_rll'];

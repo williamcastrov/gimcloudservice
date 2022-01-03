@@ -24,7 +24,7 @@ function Index() {
         console.log(currentUser ? "Estamos Logueados" : "No estamos logueados")
         if (currentUser) {
             setMetadata(currentUser.metadata.a);
-            //console.log("CURRENT USER : ", currentUser.metadata.a);
+            console.log("CURRENT USER : ", currentUser.metadata.a);
             setUser(true);
             
             async function fetchDataUsuarios() {

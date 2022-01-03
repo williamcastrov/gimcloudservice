@@ -132,7 +132,7 @@ function CrearActividad(props) {
 
         {
             listarOrdenes.map((asignar) => (
-                setCumplimientoSeleccionado([{
+               setCumplimientoSeleccionado([{
                     id: consecutivo,
                     id_cosv: ordenServicio,
                     id_actividad: idactividad,
@@ -167,7 +167,7 @@ function CrearActividad(props) {
                     cofreseriecomponentes: 0,
                     estadocomponentes: 0,
                     estadooperacionequipo_cosv: 35,
-                }])
+                }]) 
             ))
         }
 

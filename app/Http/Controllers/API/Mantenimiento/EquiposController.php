@@ -151,7 +151,7 @@ class EquiposController extends Controller
                                      INNER JOIN estadoscalidad as t10
                                      left join datosadicionalequipos on (datosadicionalequipos.id_dequ = t0.id_equ)
                   WHERE t0.empresa_equ        = t1.id_emp and t0.frecuencia_equ    = t2.id_fre    and t0.propietario_equ = t3.id_cli    and
-                        t0.marca_equ          = t4.id_mar and t0.grupoequipo_equ   = t5.id_grp    and t0.tipo_equ        = 8             and
+                        t0.marca_equ          = t4.id_mar and t0.grupoequipo_equ   = t5.id_grp    and t0.tipo_equ        IN (8,18,19)   and
                         t0.estadocontable_equ = t6.id_est and t0.estadocliente_equ = t7.id_estcli and t0.estadomtto_equ  = t8.id_estmtto and
                         t0.subgrupoparte_equ  = t9.id_sgre and t0.estadocalidad_equ = t10.id_estcal");
   
@@ -182,7 +182,7 @@ class EquiposController extends Controller
                              INNER JOIN estadoscalidad as t10 INNER JOIN equiposporusuario as t11
                              left join datosadicionalequipos on (datosadicionalequipos.id_dequ = t0.id_equ)
           WHERE t0.empresa_equ        = t1.id_emp  and t0.frecuencia_equ    = t2.id_fre     and t0.propietario_equ = t3.id_int     and
-                t0.marca_equ          = t4.id_mar  and t0.grupoequipo_equ   = t5.id_grp     and t0.tipo_equ        = 8             and
+                t0.marca_equ          = t4.id_mar  and t0.grupoequipo_equ   = t5.id_grp     and t0.tipo_equ        IN (8,18,19)    and
                 t0.estadocontable_equ = t6.id_est  and t0.estadocliente_equ = t7.id_estcli  and t0.estadomtto_equ  = t8.id_estmtto and
                 t0.subgrupoparte_equ  = t9.id_sgre and t0.estadocalidad_equ = t10.id_estcal and t0.id_equ          = t11.equipo_eus
           ORDER BY t0.codigo_equ ASC");
@@ -237,7 +237,7 @@ class EquiposController extends Controller
           //Muestra Unicamente los tipos de Interlocutores PROVEEDORES = 1
           $data = DB::select("SELECT count(id_equ) as totalequipos
           FROM  equipos as t0
-          WHERE t0.tipo_equ = 8");
+          WHERE t0.tipo_equ IN (8,18,19)");
   
           $response['data'] = $data;
           
@@ -257,7 +257,7 @@ class EquiposController extends Controller
           //Muestra Unicamente los tipos de Interlocutores PROVEEDORES = 1
           $data = DB::select("SELECT codigo_equ
           FROM  equipos as t0
-          WHERE t0.tipo_equ = 8");
+          WHERE t0.tipo_equ = IN (8,18,19) ");
   
           $response['data'] = $data;
           
@@ -278,7 +278,7 @@ class EquiposController extends Controller
           $data = DB::select("SELECT t0.estadomtto_equ as estadomtto, count(id_equ) as cantidad, nombre_estmtto,  
                               (count(id_equ)/$totequipos) * 100 as porcentaje
           FROM  equipos as t0 INNER JOIN estadosmtto as t1
-          WHERE t0.tipo_equ = 8 and t0.estadomtto_equ = t1.id_estmtto
+          WHERE t0.tipo_equ IN (8,18,19)  and t0.estadomtto_equ = t1.id_estmtto
           GROUP BY t0.estadomtto_equ, nombre_estmtto");
   
           $response['data'] = $data;
