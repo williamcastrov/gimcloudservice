@@ -8,19 +8,18 @@ use Illuminate\Database\Eloquent\Model;
 class RegistroLlamadas extends Model
 {
     use HasFactory;
-    protected $table = "registrollamadas";
+    protected $table = "seguimientoclientes";
 
     protected $primaryKey = "id_rll";
 
     protected $fillable = [
-        'consecutivo_rll',
         'cliente_rll',
         'motivollamada_rll',
-        'pedientellamada_rll',
-        'comentarios_rll',
+        'contacto_rll',
+        'equipo_rll',
         'fecha_rll',
-        'estadollamada_rll'
-    ];
+        'observaciones_rll'
+      ];
 
     public $timestamps = false;
 }

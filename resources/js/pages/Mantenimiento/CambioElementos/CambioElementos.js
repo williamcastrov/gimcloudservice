@@ -350,7 +350,7 @@ function CambioElementos() {
   const cambioelementosInsertar=(
     <div className={styles.modal}>
       <br />
-      <Typography align="center" className={styles.typography} variant="button" display="block">Agregar Cambio Elemento </Typography>
+      <Typography align="center" className={styles.typography} variant="button" display="block">Agregar Carta Garantía </Typography>
       <Grid container spacing={2} > 
         <Grid item xs={12} md={6}>
           <FormControl className={styles.formControl2}>
@@ -422,7 +422,7 @@ function CambioElementos() {
         </Grid>  
         <Grid item xs={12} md={6}>
           <FormControl className={styles.formControl2}>
-            <InputLabel id="idselectequipoentrega1_cel">Equipo Entregado</InputLabel>
+            <InputLabel id="idselectequipoentrega1_cel">Equipo Uno</InputLabel>
             <Select
               labelId="selectequipoentrega1_cel"
               name="equipoentrega1_cel"
@@ -443,28 +443,7 @@ function CambioElementos() {
         </Grid>  
         <Grid item xs={12} md={6}>
           <FormControl className={styles.formControl2}>
-            <InputLabel id="idselectequiporecibe1_cel">Equipo Recibido</InputLabel>
-            <Select
-              labelId="selectequiporecibe1_cel"
-              name="equiporecibe1_cel"
-              id="idselectequiporecibe1_cel"
-              fullWidth
-              onChange={handleChange}
-            >
-              <MenuItem value=""> <em>None</em> </MenuItem>
-              {
-                listarEquipos.map((itemselect) => {
-                  return (
-                    <MenuItem value={itemselect.id_equ}>{itemselect.codigo_equ}</MenuItem>
-                  )
-                })
-              }
-            </Select>
-          </FormControl>
-        </Grid>  
-        <Grid item xs={12} md={6}>
-          <FormControl className={styles.formControl2}>
-            <InputLabel id="idselectequipoentrega2_cel">Equipo Entregado</InputLabel>
+            <InputLabel id="idselectequipoentrega2_cel">Equipo Dos</InputLabel>
             <Select
               labelId="selectequipoentrega2_cel"
               name="equipoentrega2_cel"
@@ -485,53 +464,11 @@ function CambioElementos() {
         </Grid>  
         <Grid item xs={12} md={6}>
           <FormControl className={styles.formControl2}>
-            <InputLabel id="idselectequiporecibe2_cel">Equipo Recibido</InputLabel>
-            <Select
-              labelId="selectequiporecibe2_cel"
-              name="equiporecibe2_cel"
-              id="idselectequiporecibe2_cel"
-              fullWidth
-              onChange={handleChange}
-            >
-              <MenuItem value=""> <em>None</em> </MenuItem>
-              {
-                listarEquipos.map((itemselect) => {
-                  return (
-                    <MenuItem value={itemselect.id_equ}>{itemselect.codigo_equ}</MenuItem>
-                  )
-                })
-              }
-            </Select>
-          </FormControl>
-        </Grid>  
-        <Grid item xs={12} md={6}>
-          <FormControl className={styles.formControl2}>
-            <InputLabel id="idselectequipoentrega3_cel">Equipo Entregado</InputLabel>
+            <InputLabel id="idselectequipoentrega3_cel">Equipo Tres</InputLabel>
             <Select
               labelId="selectequipoentrega3_cel"
               name="equipoentrega3_cel"
               id="idselectequipoentrega3_cel"
-              fullWidth
-              onChange={handleChange}
-            >
-              <MenuItem value=""> <em>None</em> </MenuItem>
-              {
-                listarEquipos.map((itemselect) => {
-                  return (
-                    <MenuItem value={itemselect.id_equ}>{itemselect.codigo_equ}</MenuItem>
-                  )
-                })
-              }
-            </Select>
-          </FormControl>
-        </Grid>  
-        <Grid item xs={12} md={6}>
-          <FormControl className={styles.formControl2}>
-            <InputLabel id="idselectequiporecibe3_cel">Equipo Recibido</InputLabel>
-            <Select
-              labelId="selectequiporecibe3_cel"
-              name="equiporecibe3_cel"
-              id="idselectequiporecibe3_cel"
               fullWidth
               onChange={handleChange}
             >
@@ -786,15 +723,15 @@ function CambioElementos() {
   return (
     <div className="App">
     <br />
-    <Button variant="contained" startIcon={<SaveIcon />} color="primary" onClick={() => abrirCerrarModalInsertar()} >Agregar Cambio Elementos</Button>
+    <Button variant="contained" startIcon={<SaveIcon />} color="primary" onClick={() => abrirCerrarModalInsertar()} >Agregar Carta Garantía</Button>
      <MaterialTable
        columns={columnas}
        data={listCambioElementos}
-       title="CONSULTA CARTAS DE CAMBIO"
+       title="CONSULTAR CARTAS GARANTIA"
        actions={[
          {
            icon     : 'edit',
-           tooltip  : 'Editar Cambio Elementos',
+           tooltip  : 'Editar Carta Garantía',
            onClick  : (event, rowData) => seleccionarCambioElementos(rowData, "Editar")
          }
        ]}

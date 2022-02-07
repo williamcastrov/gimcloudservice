@@ -162,6 +162,12 @@ function Mantenimiento() {
                 </ListItemIcon>
                 <ListItemText primary="Control Valor Horometro" />
               </ListItem>
+              <ListItem component={Link} button to="/mantenimiento/cambioelementos" className={classes.nested}>
+                <ListItemIcon>
+                  <CalendarViewDayIcon />
+                </ListItemIcon>
+                <ListItemText primary="Crear Carta Garantía" />
+              </ListItem>
             </List>
           </Collapse>
 
@@ -176,6 +182,12 @@ function Mantenimiento() {
 
           <Collapse in={openIM} timeout="auto" unmountOnExit>
             <List component="div" disablePadding>
+              <ListItem component={Link} button to="/pdf/imprimircambioelemento" className={classes.nested}>
+                <ListItemIcon>
+                  <PictureAsPdfIcon />
+                </ListItemIcon>
+                <ListItemText primary="Imprimir Carta Garantía" />
+              </ListItem>
             </List>
           </Collapse>
 

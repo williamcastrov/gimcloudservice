@@ -105,16 +105,16 @@ function RegistroLlamadas() {
                     <tr>
                         <th>Cliente</th>
                         <th>Motivo Llamada</th>
-                        <th>Comentarios</th>
                         <th>Fecha Llamada</th>
-                        <th>Razon Social</th>
+                        <th>Contacto</th>
                         <th>Ciudad</th>
-                        <th>Dirección</th>
+                        <th>Dirección Cliente</th>
                         <th>Telefono</th>
                         <th>Email</th>
-                        <th>Fecha</th>
-                        <th>Fecha modifica</th>
-                        <th>Estado</th>
+                        <th>Referencia</th>
+                        <th>Modelo</th>
+                        <th>Dirección Equipo</th>
+                        <th>Observación</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -122,18 +122,18 @@ function RegistroLlamadas() {
                         listarLlamadas && listarLlamadas.map((llamadas, index) => {
                             return (
                                 <tr>
-                                    <td>{llamadas.cliente_rll}</td>
-                                    <td>{llamadas.motivollamada_rll}</td>
-                                    <td>{llamadas.comentarios_rll}</td>
-                                    <td>{llamadas.fecha_rll}</td>
                                     <td>{llamadas.razonsocial_cli}</td>
+                                    <td>{llamadas.motivollamada_rll}</td>
+                                    <td>{llamadas.fecha_rll}</td>
+                                    <td>{llamadas.nombrecontacto}</td>
                                     <td>{llamadas.nombre_ciu}</td>
                                     <td>{llamadas.direccion_cli}</td>
                                     <td>{llamadas.telefono_cli}</td>
                                     <td>{llamadas.email_cli}</td>
-                                    <td>{llamadas.fecha_creacion_cli}</td>
-                                    <td>{llamadas.fecha_modificacion_cli}</td>
-                                    <td>{llamadas.nombre_est}</td>
+                                    <td>{llamadas.referencia_dequ}</td>
+                                    <td>{llamadas.modelo_dequ}</td>
+                                    <td>{llamadas.direccion_dequ}</td>
+                                    <td>{llamadas.observaciones_rll}</td>
                                 </tr>
                             )
                         })

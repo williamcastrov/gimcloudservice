@@ -57,7 +57,26 @@ class ClientesController extends Controller
           and t0.ciudad_cli = t3.id_ciu and t0.especialidad_cli = t4.id_esp and t0.codigo_tipo_cli = t5.id_tint
           ORDER BY razonsocial_cli ASC");
   
-    
+          $response['data'] = $data;
+          // $response['data'] = $data1;
+          $response['message'] = "load successful";
+          $response['success'] = true;
+      
+        } catch (\Exception $e) {
+          $response['message'] = $e->getMessage();
+          $response['success'] = false;
+        }
+          return $response;
+      }
+
+      public function listar_clientesmultiselect(){  
+        try {
+          //Muestra Unicamente los tipos de Interlocutores CLIENTES = 2
+          $data = DB::select("SELECT t0.id_cli as value, t0.nit_cli,      t0.razonsocial_cli as label, t0.ciudad_cli,
+                                     t0.direccion_cli,   t0.telefono_cli, t0.email_cli, t0.telefono_cli
+          FROM interlocutores_cli as t0 
+          ORDER BY razonsocial_cli ASC");
+  
           $response['data'] = $data;
           // $response['data'] = $data1;
           $response['message'] = "load successful";

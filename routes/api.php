@@ -117,6 +117,7 @@ Route::delete('/proveedores/delete/{id}', 'App\Http\Controllers\API\Interlocutor
 Route::put('/proveedores/update/{id}', 'App\Http\Controllers\API\Interlocutores\ProveedoresController@update');
 
 Route::get('/clientes/listar_clientes', 'App\Http\Controllers\API\Interlocutores\ClientesController@listar_clientes');
+Route::get('/clientes/listar_clientesmultiselect', 'App\Http\Controllers\API\Interlocutores\ClientesController@listar_clientesmultiselect');
 Route::post('/clientes/create', 'App\Http\Controllers\API\Interlocutores\ClientesController@create');
 Route::get('/clientes/get/{id}', 'App\Http\Controllers\API\Interlocutores\ClientesController@get');
 Route::delete('/clientes/delete/{id}', 'App\Http\Controllers\API\Interlocutores\ClientesController@delete');
@@ -331,6 +332,8 @@ Route::get('/equipos/get/{id}', 'App\Http\Controllers\API\Mantenimiento\EquiposC
 Route::get('/equipos/fecharetornaequipo/{id}', 'App\Http\Controllers\API\Mantenimiento\EquiposController@fecharetornaequipo');
 Route::delete('/equipos/delete/{id}', 'App\Http\Controllers\API\Mantenimiento\EquiposController@delete');
 Route::put('/equipos/update/{id}', 'App\Http\Controllers\API\Mantenimiento\EquiposController@update');
+Route::get('/equipos/listar_equiposcliente/{id}', 'App\Http\Controllers\API\Mantenimiento\EquiposController@listar_equiposcliente');
+
 
 Route::get('/extrasequipos/listar_extrasequipos', 'App\Http\Controllers\API\Mantenimiento\ExtrasEquiposController@listar_extrasequipos');
 Route::post('/extrasequipos/create', 'App\Http\Controllers\API\Mantenimiento\ExtrasEquiposController@create');

@@ -5,17 +5,32 @@ import { Modal, TextField, Button, Select, MenuItem, FormControl, InputLabel, Ty
 import { green, blue, blueGrey, red } from '@material-ui/core/colors';
 import { makeStyles } from "@material-ui/core/styles";
 import FileCopyIcon from '@material-ui/icons/FileCopy';
+import ForwardIcon from '@material-ui/icons/Forward';
 import SaveIcon from '@material-ui/icons/Save';
+import { MultiSelect } from "react-multi-select-component";
 import Moment from 'moment';
 import swal from 'sweetalert';
+import "./RegistroLlamadas.css";
 
 // Componentes de Conexion con el Backend
-import estadosServices from "../../../services/Parameters/Estados";
+import contactosServices from "../../../services/Interlocutores/Contactos";
 import clientesServices from "../../../services/Interlocutores/Clientes";
 import registrollamadasServices from "../../../services/Ventas/RegistroLlamadas";
+import equiposServices from "../../../services/Mantenimiento/Equipos";
 
 const useStyles = makeStyles((theme) => ({
   modal: {
+    position: 'absolute',
+    width: 500,
+    backgroundColor: theme.palette.background.paper,
+    border: '2px solid #000',
+    boxShadow: theme.shadows[5],
+    padding: theme.spacing(2, 4, 3),
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)'
+  },
+  modal2: {
     position: 'absolute',
     width: 500,
     backgroundColor: theme.palette.background.paper,
@@ -62,28 +77,42 @@ const useStyles = makeStyles((theme) => ({
 
 function RegistroLlamadas() {
   const styles = useStyles();
+  const [modalCodigoCliente, setModalCodigoCliente] = useState(false);
   const [listRegistroLlamadas, setListRegistroLlamadas] = useState([]);
+  const [listarEquipos, setListarEquipos] = useState([]);
   const [modalInsertar, setModalInsertar] = useState(false);
   const [modalEditar, setModalEditar] = useState(false);
   const [modalEliminar, setModalEliminar] = useState(false);
   const [formError, setFormError] = useState(false);
-  const [listEstados, setListEstados] = useState([]);
+  const [listContactos, setListContactos] = useState([]);
   const [listarClientes, setListarClientes] = useState([]);
+  const [clientesMultiselect, setClientesMultiselect] = useState([]);
   const [actualiza, setActualiza] = useState(false);
   const [duplica, setDuplica] = useState(false);
+  const [selected, setSelected] = useState([]);
+  const [grabar, setGrabar] = useState(false);
+  let contacto = 0;
 
   const fechaactual = Moment(new Date()).format('YYYY-MM-DD HH:mm:ss');
   const [registroLlamadasSeleccionado, setRegistroLlamadasSeleccionado] = useState({
-    id_rll: "",
-    consecutivo_rll: 0,
+    id_rll: 0,
     cliente_rll: "",
     motivollamada_rll: "",
-    pedientellamada_rll: "",
-    comentarios_rll: "",
+    contacto_rll: "",
+    equipo_rll: 0,
     fecha_rll: fechaactual,
-    estadollamada_rll: "",
+    observaciones_rll: "",
   })
 
+  const [cliente, setCliente] = useState({
+    direccion_cli: "",
+    email_cli: "",
+    razonsocial_cli: "",
+    nit_cli: "",
+    telefono_cli: "",
+    id_cli: 0
+  });
+/*
   useEffect(() => {
     async function fetchDataLlamadas() {
       const res = await registrollamadasServices.listarregistrollamadas();
@@ -93,17 +122,7 @@ function RegistroLlamadas() {
     }
     fetchDataLlamadas();
   }, [actualiza])
-
-  useEffect(() => {
-    async function fetchDataEstados() {
-      const res = await estadosServices.listEstadosLlamadas();
-      setListEstados(res.data)
-      //console.log(res.data);
-      setActualiza(false);
-    }
-    fetchDataEstados();
-  }, [actualiza])
-
+*/
   useEffect(() => {
     async function fetchDataClientes() {
       const res = await clientesServices.listClientes();
@@ -111,7 +130,28 @@ function RegistroLlamadas() {
       //console.log(res.data);
     }
     fetchDataClientes();
+
+    async function fetchDataClientesMultiselect() {
+      const res = await clientesServices.listar_clientesmultiselect();
+      setClientesMultiselect(res.data)
+      //console.log(res.data);
+    }
+    fetchDataClientesMultiselect();
   }, [])
+
+  const contactosInterlocutor = (cliente) => {
+    console.log("CODIGO CLIENTE : ", cliente)
+
+    async function fetchDataContactos() {
+      const res = await contactosServices.contactosInterlocutor(cliente);
+      setListContactos(res.data);
+      console.log("CONTACTOS : ", res.data)
+      if (!res.success) {
+        //swal("Contactos", "Cliente Seleccionado no tiene Contactos!", "warning", { button: "Aceptar" });
+      }
+    }
+    fetchDataContactos();
+  }
 
   const handleChange = e => {
     const { name, value } = e.target;
@@ -127,62 +167,43 @@ function RegistroLlamadas() {
     (caso === "Editar") ? abrirCerrarModalEditar() : abrirCerrarModalEliminar()
   }
 
-  const duplicarLlamada = (llamada, caso) => {
-    console.log("LLAMADA : ", llamada);
-    
-    let consecutivo;
-    if(llamada.consecutivo_rll === 0){
-       consecutivo = llamada.consecutivo_rll + 1;
-    }else{
-      consecutivo = llamada.consecutivo_rll;
-    }
-
-    //var d = Date.parse(llamada.fecha_rll);
-    //console.log("VALOR FECHA : ", d)
-    {
-      setRegistroLlamadasSeleccionado([{
-        id_rll: llamada.id_rll,
-        consecutivo_rll: consecutivo,
-        cliente_rll: llamada.cliente_rll,
-        motivollamada_rll: llamada.motivollamada_rll,
-        pedientellamada_rll: llamada.pedientellamada_rll,
-        comentarios_rll: llamada.comentarios_rll,
-        fecha_rll: fechaactual,
-        estadollamada_rll: llamada.estadollamada_rll,
-      }])
-    }
-
-    (caso === "Editar") ? duplicaRegistroLlamada() : duplicaRegistroLlamada()
-  }
-
-  const duplicaRegistroLlamada = async () => {
-     setDuplica(true);
-  }
-
-  useEffect(() => {
-    if(duplica){
-
-      //console.log("REGISTRO DUPLICADO : ", registroLlamadasSeleccionado[0]);
-      async function seguimiento() {
-        const res = await registrollamadasServices.save(registroLlamadasSeleccionado[0]);
-
-        if (res.success) {
-          swal("Registro Llamadas", "Registro Seguimiento Llamada Creado de forma Correcta!", "success", { button: "Aceptar" });
-          console.log(res.message)
-          //abrirCerrarModalInsertar();
-        } else {
-          swal("Registro Llamadas", "Error Creando Seguimiento al Registro de Llamadas!", "error", { button: "Aceptar" });
-          console.log(res.message);
-          //abrirCerrarModalInsertar();
-        }
-      }
-      seguimiento();
-      setDuplica(false);
-      setActualiza(true);
-    }
-  }, [duplica])
-
   const abrirCerrarModalInsertar = () => {
+    console.log("CLIENTE SELECCIONADO : ", selected);
+    setCliente([{
+      ciudad_cli: selected[0].ciudad_cli,
+      direccion_cli: selected[0].direccion_cli,
+      email_cli: selected[0].email_cli,
+      razonsocial_cli: selected[0].label,
+      nit_cli: selected[0].nit_cli,
+      telefono_cli: selected[0].telefono_cli,
+      id_cli: selected[0].value
+    }]);
+
+    async function fetchDataContactos() {
+      const res = await contactosServices.contactosInterlocutor(selected[0].value);
+      setListContactos(res.data);
+      console.log("CONTACTOS : ", res.data)
+      if (!res.success) {
+        //swal("Contactos", "Cliente Seleccionado no tiene Contactos!", "warning", { button: "Aceptar" });
+      }
+    }
+    fetchDataContactos();
+
+    async function fetchDataEquipos() {
+      const res = await equiposServices.listar_equiposcliente(selected[0].value);
+      setListarEquipos(res.data)
+      console.log("LISTA EQUIPOS CLIENTE : ", res.data)
+    }
+    fetchDataEquipos();
+
+    async function fetchDataLlamadas() {
+      const res = await registrollamadasServices.listar_registrollamadascliente(selected[0].value);
+      setListRegistroLlamadas(res.data)
+      //console.log(res.data);
+      setActualiza(false);
+    }
+    fetchDataLlamadas();
+
     setModalInsertar(!modalInsertar);
   }
 
@@ -194,47 +215,45 @@ function RegistroLlamadas() {
     setModalEliminar(!modalEliminar);
   }
 
-  const grabarRegistroLlamada = async () => {
+  const leerDatosClientes = () => {
+    leerModalCodigoCliente();
+  }
 
+  const leerModalCodigoCliente = () => {
+    setModalCodigoCliente(!modalCodigoCliente);
+  }
+
+  const grabarRegistroLlamada = async () => {
     setFormError({});
     let errors = {};
     let formOk = true;
 
-    if (!registroLlamadasSeleccionado.cliente_rll) {
-      errors.cliente_rll = true;
-      formOk = false;
-    }
-
     if (!registroLlamadasSeleccionado.motivollamada_rll) {
+      alert("2")
       errors.motivollamada_rll = true;
       formOk = false;
     }
 
-    if (!registroLlamadasSeleccionado.pedientellamada_rll) {
-      errors.pedientellamada_rll = true;
-      formOk = false;
-    }
-
-    if (!registroLlamadasSeleccionado.pedientellamada_rll) {
-      errors.pedientellamada_rll = true;
+    if (!registroLlamadasSeleccionado.contacto_rll) {
+      alert("2")
+      errors.contacto_rll = true;
       formOk = false;
     }
 
     setFormError(errors);
 
     if (formOk) {
-      console.log(registroLlamadasSeleccionado);
-      const res = await registrollamadasServices.save(registroLlamadasSeleccionado);
-
-      if (res.success) {
-        swal("Registro Llamadas", "Registro Llamada Creado de forma Correcta!", "success", { button: "Aceptar" });
-        console.log(res.message)
-        abrirCerrarModalInsertar();
-      } else {
-        swal("Registro Llamadas", "Error Creando el Registro de Llamadas!", "error", { button: "Aceptar" });
-        console.log(res.message);
-        abrirCerrarModalInsertar();
-      }
+      console.log("CODIGO EQUIPO : ", registroLlamadasSeleccionado.equipo_rll)
+      setRegistroLlamadasSeleccionado([{
+        id_rll: 0,
+        cliente_rll: cliente[0].id_cli,
+        motivollamada_rll: registroLlamadasSeleccionado.motivollamada_rll,
+        contacto_rll: registroLlamadasSeleccionado.contacto_rll,
+        equipo_rll: registroLlamadasSeleccionado.equipo_rll,
+        fecha_rll: registroLlamadasSeleccionado.fecha_rll,
+        observaciones_rll: registroLlamadasSeleccionado.observaciones_rll
+      }]);
+      setGrabar(true);
     }
     else {
       swal("Registro Llamadas", "Debe Ingresar Todos los Datos, Revisar Información!", "warning", { button: "Aceptar" });
@@ -244,6 +263,27 @@ function RegistroLlamadas() {
     setActualiza(true);
   }
 
+  useEffect(() => {
+    async function grabarLlamada() {
+      if (grabar) {
+        console.log("DATOS REGISTRO LLAMADAS : ", registroLlamadasSeleccionado[0]);
+
+        const res = await registrollamadasServices.save(registroLlamadasSeleccionado[0]);
+
+        if (res.success) {
+          swal("Registro Llamadas", "Registro Llamada Creado de forma Correcta!", "success", { button: "Aceptar" });
+          console.log(res.message)
+          abrirCerrarModalInsertar();
+        } else {
+          swal("Registro Llamadas", "Error Creando el Registro de Llamadas!", "error", { button: "Aceptar" });
+          console.log(res.message);
+          abrirCerrarModalInsertar();
+        }
+      }
+    }
+    grabarLlamada();
+  }, [grabar])
+
   const actualizarRegistroLlamada = async () => {
 
     setFormError({});
@@ -251,22 +291,20 @@ function RegistroLlamadas() {
     let formOk = true;
 
     if (!registroLlamadasSeleccionado.cliente_rll) {
+      alert("1")
       errors.cliente_rll = true;
       formOk = false;
     }
 
     if (!registroLlamadasSeleccionado.motivollamada_rll) {
+      alert("2")
       errors.motivollamada_rll = true;
       formOk = false;
     }
 
-    if (!registroLlamadasSeleccionado.pedientellamada_rll) {
-      errors.pedientellamada_rll = true;
-      formOk = false;
-    }
-
-    if (!registroLlamadasSeleccionado.pedientellamada_rll) {
-      errors.pedientellamada_rll = true;
+    if (!registroLlamadasSeleccionado.contacto_rll) {
+      alert("3")
+      errors.contacto_rll = true;
       formOk = false;
     }
 
@@ -274,6 +312,8 @@ function RegistroLlamadas() {
 
     if (formOk) {
       console.log("DATA REGISTRO LLAMADA : ", registroLlamadasSeleccionado)
+
+
       const res = await registrollamadasServices.update(registroLlamadasSeleccionado);
 
       if (res.success) {
@@ -317,10 +357,6 @@ function RegistroLlamadas() {
       field: 'id_rll'
     },
     {
-      title: 'Consecutivo',
-      field: 'consecutivo_rll'
-    },
-    {
       title: 'Cliente',
       field: 'razonsocial_cli'
     },
@@ -329,21 +365,24 @@ function RegistroLlamadas() {
       field: 'motivollamada_rll'
     },
     {
-      title: 'Pendiente',
-      field: 'pedientellamada_rll',
-      cellStyle: { minWidth: 300 }
-    },
-    {
-      title: 'Comentarios',
-      field: 'comentarios_rll'
+      title: 'Contacto',
+      field: 'nombrecontacto'
     },
     {
       title: 'Fecha',
       field: 'fecha_rll'
     },
     {
-      title: 'Estado',
-      field: 'nombre_est'
+      title: 'Referencia',
+      field: 'referencia_dequ'
+    },
+    {
+      title: 'Dirección',
+      field: 'direccion_dequ'
+    },
+    {
+      title: 'Observación',
+      field: 'observaciones_rll'
     }
   ]
 
@@ -357,6 +396,7 @@ function RegistroLlamadas() {
           name="cliente_rll"
           id="idselectcliente_rll"
           onChange={handleChange}
+          defaultValue={cliente[0] && cliente[0].id_cli}
         >
           <MenuItem value="">  <em>None</em> </MenuItem>
           {
@@ -370,48 +410,56 @@ function RegistroLlamadas() {
       </FormControl>
       <TextField className={styles.inputMaterial} label="Motivo de Llamada" name="motivollamada_rll" onChange={handleChange} />
       <br />
-      <FormControl className={styles.formControl}>
-        <InputLabel id="idselectEmpresa"> Pendiente Llamada </InputLabel>
-        <Select
-          labelId="selectPendiente"
-          name="pedientellamada_rll"
-          id="idselectpedientellamada_rlll"
-          onChange={handleChange}
-        >
-          <MenuItem value="">  <em>None</em> </MenuItem>
-          {
-            listEstados.map((itemselect) => {
-              return (
-                <MenuItem value={itemselect.id_est}>{itemselect.nombre_est}</MenuItem>
-              )
-            })
-          }
-        </Select>
-      </FormControl>
-      <TextField className={styles.inputMaterial} label="Comentarios" name="comentarios_rll" onChange={handleChange} />
-
       <TextField type="date" InputLabelProps={{ shrink: true }} name="fecha_rll"
         defaultValue={Moment(fechaactual).format('YYYY-MM-DD')} label="Fecha Llamada"
         fullWidth onChange={handleChange} />
-
       <FormControl className={styles.formControl}>
-        <InputLabel id="idselectEstadoLlamada"> Estado </InputLabel>
+        <InputLabel id="contacto_rll">Contacto</InputLabel>
         <Select
-          labelId="selectEstadoLlamada"
-          name="estadollamada_rll"
-          id="idselectestadollamada_rll"
+          labelId="selectcontacto_rll"
+          name="contacto_rll"
+          id="idselectcontacto_rll"
+          fullWidth
           onChange={handleChange}
+          onClick={(e) => contactosInterlocutor(e.target.value)}
+          //disabled="true"
+          defaultValue={contacto}
         >
-          <MenuItem value="">  <em>None</em> </MenuItem>
+          <MenuItem value=""> <em>None</em> </MenuItem>
           {
-            listEstados.map((itemselect) => {
+            listContactos && listContactos.map((itemselect) => {
               return (
-                <MenuItem value={itemselect.id_est}>{itemselect.nombre_est}</MenuItem>
+                <MenuItem value={itemselect.id_con}>{itemselect.primer_nombre_con}{" "}
+                  {itemselect.primer_apellido_con}</MenuItem>
               )
             })
           }
         </Select>
       </FormControl>
+      <FormControl className={styles.formControl}>
+        <InputLabel id="contacto_rll">Equipos</InputLabel>
+        <Select
+          labelId="selectequipo_rll"
+          name="equipo_rll"
+          id="idselectequipo_rll"
+          fullWidth
+          onChange={handleChange}
+        //disabled="true"
+        //defaultValue={0}
+        >
+          <MenuItem value=""> <em>None</em> </MenuItem>
+          {
+            listarEquipos && listarEquipos.map((itemselect) => {
+              return (
+                <MenuItem value={itemselect.id_equ}>{itemselect.referencia_dequ}{" "}
+                  {itemselect.modelo_dequ}{" "}{itemselect.direccion_dequ}
+                </MenuItem>
+              )
+            })
+          }
+        </Select>
+      </FormControl>
+      <TextField className={styles.inputMaterial} label="Observaciones" name="observaciones_rll" onChange={handleChange} />
       <br /><br />
       <div align="right">
         <Button className={styles.button} color="primary" onClick={() => grabarRegistroLlamada()} >Insertar</Button>
@@ -423,70 +471,6 @@ function RegistroLlamadas() {
   const llamadaeditar = (
     <div className={styles.modal}>
       <Typography align="center" className={styles.typography} variant="button" display="block">Actualizar Estados del Cliente</Typography>
-      <FormControl className={styles.formControl}>
-        <InputLabel id="idselectEmpresa"> Cliente </InputLabel>
-        <Select
-          labelId="selectCliente"
-          name="cliente_rll"
-          id="idselectcliente_rll"
-          onChange={handleChange}
-          value={registroLlamadasSeleccionado && registroLlamadasSeleccionado.cliente_rll}
-        >
-          <MenuItem value="">  <em>None</em> </MenuItem>
-          {
-            listarClientes.map((itemselect) => {
-              return (
-                <MenuItem value={itemselect.id_cli}>{itemselect.razonsocial_cli}</MenuItem>
-              )
-            })
-          }
-        </Select>
-      </FormControl>
-      <TextField className={styles.inputMaterial} label="Motivo de Llamada" name="motivollamada_rll" onChange={handleChange} />
-      <br />
-      <FormControl className={styles.formControl}>
-        <InputLabel id="idselectEmpresa"> Pendiente Llamada </InputLabel>
-        <Select
-          labelId="selectPendiente"
-          name="pedientellamada_rll"
-          id="idselectpedientellamada_rlll"
-          onChange={handleChange}
-          value={registroLlamadasSeleccionado && registroLlamadasSeleccionado.pedientellamada_rll}
-        >
-          <MenuItem value="">  <em>None</em> </MenuItem>
-          {
-            listEstados.map((itemselect) => {
-              return (
-                <MenuItem value={itemselect.id_est}>{itemselect.nombre_est}</MenuItem>
-              )
-            })
-          }
-        </Select>
-      </FormControl>
-      <TextField className={styles.inputMaterial} label="Comentarios" name="comentarios_rll" onChange={handleChange} />
-      <TextField type="date" InputLabelProps={{ shrink: true }} name="fecha_rll"
-        defaultValue={Moment(fechaactual).format('YYYY-MM-DD')} label="Fecha Llamada"
-        value={registroLlamadasSeleccionado && registroLlamadasSeleccionado.fecha_rll}
-        fullWidth onChange={handleChange} />
-      <FormControl className={styles.formControl}>
-        <InputLabel id="idselectEstadoLlamada"> Estado </InputLabel>
-        <Select
-          labelId="selectEstadoLlamada"
-          name="estadollamada_rll"
-          id="idselectestadollamada_rll"
-          onChange={handleChange}
-          value={registroLlamadasSeleccionado && registroLlamadasSeleccionado.estadollamada_rll}
-        >
-          <MenuItem value="">  <em>None</em> </MenuItem>
-          {
-            listEstados.map((itemselect) => {
-              return (
-                <MenuItem value={itemselect.id_est}>{itemselect.nombre_est}</MenuItem>
-              )
-            })
-          }
-        </Select>
-      </FormControl>
       <br /><br />
       <div align="right">
         <Button className={styles.button} color="primary" onClick={() => actualizarRegistroLlamada()} >Editar</Button>
@@ -508,10 +492,53 @@ function RegistroLlamadas() {
     </div>
   )
 
+  const codigoCliente = (
+    <div className="App" >
+      <div className={styles.modal2}>
+        <Typography align="center" className={styles.typography} variant="button" display="block" >
+          Seleccionar Codigo Cliente
+        </Typography>
+        <Grid item xs={12} md={4}>
+          <MultiSelect className="inputmultiselect"
+            options={clientesMultiselect}
+            value={selected}
+            onChange={setSelected}
+            labelledBy="Seleccione el Cliente"
+            overrideStrings={{
+              allItemsAreSelected:
+                "All items are selected.",
+              clearSearch:
+                "Limpiar",
+              noOptions:
+                "No options",
+              search: "Buscar",
+              selectAll:
+                "Marcar solo uno",
+              selectAllFiltered:
+                "Select All (Filtered)",
+              selectSomeItems:
+                "Seleccionar Cliente ...",
+            }}
+          />
+        </Grid>
+        <br />
+        <div align="center">
+          <Button className={styles.button} variant="contained" startIcon={<SaveIcon />} color="primary"
+            onClick={() => abrirCerrarModalInsertar()}>  Crear Registro Cliente
+          </Button>
+        </div>
+      </div>
+    </div>
+  )
+
+
   return (
     <div className="App">
       <br />
-      <Button variant="contained" startIcon={<SaveIcon />} color="primary" onClick={() => abrirCerrarModalInsertar()} >Agregar Llamada</Button>
+      <Button className={styles.button}
+        variant="contained" startIcon={<ForwardIcon />} color="primary" onClick={() => leerDatosClientes()}
+      > Seleccionar Cliente
+      </Button>
       <MaterialTable
         columns={columnas}
         data={listRegistroLlamadas}
@@ -521,11 +548,6 @@ function RegistroLlamadas() {
             icon: 'edit',
             tooltip: 'Editar Llamada',
             onClick: (event, rowData) => seleccionarLlamada(rowData, "Editar")
-          },
-          {
-            icon: FileCopyIcon,
-            tooltip: 'Duplicar Registro',
-            onClick: (event, rowData) => duplicarLlamada(rowData, "Duplicar")
           },
           {
             icon: 'delete',
@@ -542,6 +564,12 @@ function RegistroLlamadas() {
           }
         }}
       />{ }
+      <Modal
+        open={modalCodigoCliente}
+        onClose={leerModalCodigoCliente}
+      >
+        {codigoCliente}
+      </Modal>
       <Modal
         open={modalInsertar}
         onClose={abrirCerrarModalInsertar}

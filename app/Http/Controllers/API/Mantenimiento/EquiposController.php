@@ -232,6 +232,28 @@ class EquiposController extends Controller
           return $response;
       }
 
+      public function listar_equiposcliente($cliente){
+        try {
+          //Muestra Unicamente los tipos de Interlocutores PROVEEDORES = 1
+          $data = DB::select("SELECT t0.*, t1.primer_nombre_cli, t1.segundo_nombre_cli, t1.primer_apellido_cli,
+                                     t1.segundo_apellido_cli,  t1.razonsocial_cli, t1.ciudad_cli, t1.direccion_cli,
+                                     t2.direccion_dequ, t2.referencia_dequ, t2.modelo_dequ
+          FROM equipos as t0 INNER JOIN interlocutores_cli as t1 INNER JOIN datosadicionalequipos as t2
+          WHERE t0.propietario_equ = $cliente and t0.propietario_equ = t1.id_cli and t0.id_equ = t2.id_dequ");
+  
+          $response['data'] = $data;
+          
+          // $response['data'] = $data1;
+          $response['message'] = "load successful";
+          $response['success'] = true;
+      
+        } catch (\Exception $e) {
+          $response['message'] = $e->getMessage();
+          $response['success'] = false;
+        }
+          return $response;
+      }
+
       public function sumatotalequipos(){
         try {
           //Muestra Unicamente los tipos de Interlocutores PROVEEDORES = 1

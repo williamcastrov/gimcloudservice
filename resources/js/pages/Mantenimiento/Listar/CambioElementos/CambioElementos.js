@@ -287,15 +287,22 @@ function CambioElementos() {
             <Grid item xs={12} md={12}>
             <Typography align="left" className={styles.typography} display="block" >
               De Logística Estructural S.A. con NIT. 900.161.726-3, les notificamos de manera formal
-              que de acuerdo al contrato de renta que tenemos vigente a la fecha, se hace cambio de
-              los siguientes elementos:
+              que los siguientes equipos se encuentran en garantía por un año, y en caso de una eventualidad para ser efectiva
+              esa garantía es importante que los equipos cuenten con los mantenimientos preventivos realizados por LOGISTRAL
+              máximo cada tres meses.
+              
+              El día 27 de Septiembre del 2021 se contacta y se le envía al señor Sandro la cotización No. CT-007776,
+              del costo de los mantenimientos, siendo no aceptada. 
+              
+              A continuación se relacionan los equipos al cuál nos referimos, y en caso de alguna eventualidad, no serán atendidos como garantía,
+              sino como correctivo.
             </Typography>
             </Grid>
           </Grid>
           <br/>
           <Grid item xs={12} md={12}>
             <Typography align="left" className={styles.typography} variant="button" display="block" > 
-              ELEMENTO(S) ENTREGADO(S): 
+              EQUIPOS(S) RELACIONADOS(S): 
             </Typography>
           </Grid>
           <table className="table table-bordered">
@@ -344,47 +351,7 @@ function CambioElementos() {
                   </tr>
                 )
               })}
-              <Grid item xs={12} md={12}>
-                <Typography align="left" className={styles.typography} variant="button" display="block" > 
-                  ELEMENTO(S)_DEVUELTOS(S): 
-                </Typography>
-              </Grid>
-              {listarRecibe1 && listarRecibe1.map((cumplimiento, index) => {
-                return (
-                  <tr>
-                    <td>{cumplimiento.codigo_equ}</td>
-                    <td>{cumplimiento.referencia_dequ}</td>
-                    <td>{cumplimiento.descripcion_equ}</td>
-                    <td>{cumplimiento.descripcion_mar}</td>
-                    <td>{cumplimiento.modelo_dequ}</td>
-                    <td>{cumplimiento.serie_dequ}</td>
-                  </tr>
-                )
-              })}
-               {listarRecibe2 && listarRecibe2.map((cumplimiento, index) => {
-                return (
-                  <tr>
-                    <td>{cumplimiento.codigo_equ}</td>
-                    <td>{cumplimiento.referencia_dequ}</td>
-                    <td>{cumplimiento.descripcion_equ}</td>
-                    <td>{cumplimiento.descripcion_mar}</td>
-                    <td>{cumplimiento.modelo_dequ}</td>
-                    <td>{cumplimiento.serie_dequ}</td>
-                  </tr>
-                )
-              })}
-               {listarRecibe3 && listarRecibe3.map((cumplimiento, index) => {
-                return (
-                  <tr>
-                    <td>{cumplimiento.codigo_equ}</td>
-                    <td>{cumplimiento.referencia_dequ}</td>
-                    <td>{cumplimiento.descripcion_equ}</td>
-                    <td>{cumplimiento.descripcion_mar}</td>
-                    <td>{cumplimiento.modelo_dequ}</td>
-                    <td>{cumplimiento.serie_dequ}</td>
-                  </tr>
-                )
-              })}
+              
             </tbody>
           </table>
           <br/>
