@@ -5,6 +5,7 @@ import firebase from "../../../../server/firebase";
 import "firebase/auth";
 import swal from 'sweetalert';
 import { useHistory } from "react-router-dom";
+import { green, blue, blueGrey, red, grey } from '@material-ui/core/colors';
 
 // Web Services
 import usuariosServices from "../../../../services/Usuarios";
@@ -25,6 +26,16 @@ const useStyles = makeStyles((theme) => ({
     grow: {
         flexGrow: 1
     }
+    ,
+    button: {
+        color: theme.palette.getContrastText(blueGrey[500]),
+        backgroundColor: green[700],
+        margin: theme.spacing(1),
+        fontSize: 12,
+        '&:hover': {
+            backgroundColor: blue[700],
+        },
+    },
 }));
 
 const BarSession = (props) => {
@@ -78,9 +89,14 @@ const BarSession = (props) => {
         history.push("/gestionordenes/ordenes");
     }
 
-    const IraOrdenesChequeo = () => {
-        history.push("/listachequeo/panellistachequeo");
+    const RegistroLlamadas = () => {
+        history.push("/ventasservicios/registrollamadas");
     }
+
+    const OfrecerServicio = () => {
+        history.push("/alertas/ofrecerservicios");
+    }
+
 
     const [state, setState] = React.useState({
         left: false,
@@ -125,9 +141,12 @@ const BarSession = (props) => {
                 <div className={classes.sectionDesktop} >
                     <Button size="large" onClick={IraInicio} variant="outlined" color="inherit" > Ir a Inicio </Button>
                     <Button size="large" onClick={IraOrdenes} variant="outlined" color="inherit" > Ir a Ordenes </Button>
-                    <Button size="large" onClick={IraOrdenesChequeo} variant="outlined" color="inherit" >Entrega Recepción Equipos</Button>
+                    <Button size="large" onClick={RegistroLlamadas} variant="outlined" color="inherit" >Registro Llamadas</Button>
                     <Button size="large" onClick={habilitaralertas} variant="outlined" color="inherit" >Habilitar Alertas</Button>
                     <Button size="large" onClick={habilitarindicadores} variant="outlined" color="inherit" >Habilitar Indicadores</Button>
+                    <Button className={classes.button} 
+                        size="large" onClick={OfrecerServicio} variant="outlined" color="inherit" >Ofrecer Servicio
+                    </Button>
                 </div>
 
                 <div className={classes.grow} ></div>

@@ -92,6 +92,15 @@ estados.listEstadosLlamadas = async () => {
     return res;
 }
 
+estados.listar_estadosregistrollamadas = async () => {
+    const urlList = baseUrl+"/listar_estadosregistrollamadas"
+    const res = await axios.get(urlList)
+    .then(response=>{ return response.data; })
+    .catch(error=>{ return error; })
+   
+    return res;
+}
+
 estados.update = async (data) => {
     console.log(data);
     const urlUpdate = baseUrl+"/update/"+data.id_est

@@ -168,6 +168,9 @@ import CostosVariables from "./pages/Costos/CostosVariables";
 import TipoCostoVariable from "./pages/Costos/TipoCostoVariable";
 import CostosRealesEquipos from "./pages/Costos/Informes/CostosRealesEquipos";
 
+import OfrecerServicios from './pages/Alertas/OfrecerServicios';
+import OfertarServicios from './pages/Informes/OfecerServicio/OfrecerServicio';
+
 function Main(props) {
   const { metadata, componente, tipousuario, user, idUsu } = props;
   //console.log("TIPO DE USUARIO EN MAIN : ", tipousuario)
@@ -329,6 +332,9 @@ function Main(props) {
                 <Route path="/rentabilidad/graphics" component={Graphics} />
                 <Route path="/rentabilidad/groupedbar" component={GroupedBar} />
 
+                <Route path="/alertas/ofrecerservicios" component={OfrecerServicios} />
+                <Route path="/informes/ofertarservicios" component={OfertarServicios} />
+
                 <Route path="/rentabilidad/facturacion" component={Facturacion} />
                 <Route path="/images/images" component={Images} />
                 <Route path="/pdfs/pdfcontratos" component={PdfContratos} />
@@ -360,5 +366,8 @@ function Main(props) {
 }
 
 export default Main;
+
+//<Route path="/alertas/ofrecerservicios" component={OfrecerServicios} />
+
 
 //  <Route path="/parametros/paises" component={Paises}/>

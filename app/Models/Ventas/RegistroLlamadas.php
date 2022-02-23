@@ -18,7 +18,8 @@ class RegistroLlamadas extends Model
         'contacto_rll',
         'equipo_rll',
         'fecha_rll',
-        'observaciones_rll'
+        'observaciones_rll',
+        'estado_rll'
       ];
 
     public $timestamps = false;

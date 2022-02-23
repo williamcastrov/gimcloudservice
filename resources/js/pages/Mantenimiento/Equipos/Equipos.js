@@ -739,7 +739,7 @@ function RegistraEquipos(props) {
       cellStyle: { minWidth: 70 }
     },
     {
-      field: 'razonsocial_int',
+      field: 'razonsocial_cli',
       title: 'Propietario',
       cellStyle: { minWidth: 120 }
     },

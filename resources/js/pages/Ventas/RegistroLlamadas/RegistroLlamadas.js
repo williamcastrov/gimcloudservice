@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import MaterialTable from "material-table";
 import { Modal, TextField, Button, Select, MenuItem, FormControl, InputLabel, Typography, Grid } from "@material-ui/core";
-import { green, blue, blueGrey, red } from '@material-ui/core/colors';
+import { green, blue, blueGrey, red, grey } from '@material-ui/core/colors';
 import { makeStyles } from "@material-ui/core/styles";
 import FileCopyIcon from '@material-ui/icons/FileCopy';
 import ForwardIcon from '@material-ui/icons/Forward';
@@ -11,12 +11,14 @@ import { MultiSelect } from "react-multi-select-component";
 import Moment from 'moment';
 import swal from 'sweetalert';
 import "./RegistroLlamadas.css";
+import { useHistory } from "react-router-dom";
 
 // Componentes de Conexion con el Backend
 import contactosServices from "../../../services/Interlocutores/Contactos";
 import clientesServices from "../../../services/Interlocutores/Clientes";
 import registrollamadasServices from "../../../services/Ventas/RegistroLlamadas";
 import equiposServices from "../../../services/Mantenimiento/Equipos";
+import estadosServices from "../../../services/Parameters/Estados";
 
 const useStyles = makeStyles((theme) => ({
   modal: {
@@ -73,6 +75,24 @@ const useStyles = makeStyles((theme) => ({
       backgroundColor: blue[700],
     },
   },
+  button3: {
+    color: theme.palette.getContrastText(blueGrey[500]),
+    backgroundColor: blue[700],
+    margin: theme.spacing(1),
+    fontSize: 12,
+    '&:hover': {
+      backgroundColor: blue[700],
+    },
+  },
+  button4: {
+    color: theme.palette.getContrastText(blueGrey[500]),
+    backgroundColor: grey[700],
+    margin: theme.spacing(1),
+    fontSize: 12,
+    '&:hover': {
+      backgroundColor: blue[700],
+    },
+  },
 }));
 
 function RegistroLlamadas() {
@@ -90,7 +110,10 @@ function RegistroLlamadas() {
   const [actualiza, setActualiza] = useState(false);
   const [duplica, setDuplica] = useState(false);
   const [selected, setSelected] = useState([]);
+  const [motivosLlamadas, setMotivosLlamadas] = useState([]);
+  const [estadosLlamadas, setEstadosLlamadas] = useState([]);
   const [grabar, setGrabar] = useState(false);
+  const history = useHistory();
   let contacto = 0;
 
   const fechaactual = Moment(new Date()).format('YYYY-MM-DD HH:mm:ss');
@@ -102,6 +125,7 @@ function RegistroLlamadas() {
     equipo_rll: 0,
     fecha_rll: fechaactual,
     observaciones_rll: "",
+    estado_rll: "",
   })
 
   const [cliente, setCliente] = useState({
@@ -112,17 +136,17 @@ function RegistroLlamadas() {
     telefono_cli: "",
     id_cli: 0
   });
-/*
-  useEffect(() => {
-    async function fetchDataLlamadas() {
-      const res = await registrollamadasServices.listarregistrollamadas();
-      setListRegistroLlamadas(res.data)
-      //console.log(res.data);
-      setActualiza(false);
-    }
-    fetchDataLlamadas();
-  }, [actualiza])
-*/
+  /*
+    useEffect(() => {
+      async function fetchDataLlamadas() {
+        const res = await registrollamadasServices.listarregistrollamadas();
+        setListRegistroLlamadas(res.data)
+        //console.log(res.data);
+        setActualiza(false);
+      }
+      fetchDataLlamadas();
+    }, [actualiza])
+  */
   useEffect(() => {
     async function fetchDataClientes() {
       const res = await clientesServices.listClientes();
@@ -137,6 +161,24 @@ function RegistroLlamadas() {
       //console.log(res.data);
     }
     fetchDataClientesMultiselect();
+  }, [])
+
+  useEffect(() => {
+    async function fetchDataMotivoLlamadas() {
+      const res = await estadosServices.listEstadosLlamadas();
+      setMotivosLlamadas(res.data)
+      //console.log(res.data);
+    }
+    fetchDataMotivoLlamadas();
+  }, [])
+
+  useEffect(() => {
+    async function fetchDataEstadosLlamadas() {
+      const res = await estadosServices.listar_estadosregistrollamadas();
+      setEstadosLlamadas (res.data)
+      //console.log(res.data);
+    }
+    fetchDataEstadosLlamadas();
   }, [])
 
   const contactosInterlocutor = (cliente) => {
@@ -168,7 +210,7 @@ function RegistroLlamadas() {
   }
 
   const abrirCerrarModalInsertar = () => {
-    console.log("CLIENTE SELECCIONADO : ", selected);
+    console.log("CREAR REGISTRO CLIENTE SELECCIONADO : ", selected);
     setCliente([{
       ciudad_cli: selected[0].ciudad_cli,
       direccion_cli: selected[0].direccion_cli,
@@ -190,6 +232,7 @@ function RegistroLlamadas() {
     fetchDataContactos();
 
     async function fetchDataEquipos() {
+      console.log("CLIENTE EQUIPO : ", selected[0].value)
       const res = await equiposServices.listar_equiposcliente(selected[0].value);
       setListarEquipos(res.data)
       console.log("LISTA EQUIPOS CLIENTE : ", res.data)
@@ -199,12 +242,26 @@ function RegistroLlamadas() {
     async function fetchDataLlamadas() {
       const res = await registrollamadasServices.listar_registrollamadascliente(selected[0].value);
       setListRegistroLlamadas(res.data)
-      //console.log(res.data);
+      console.log("RESPUESTA CONSULTA CLIENTE XXX: ", res.data);
       setActualiza(false);
     }
     fetchDataLlamadas();
 
     setModalInsertar(!modalInsertar);
+  }
+
+  const consultarRegistroLlamadas = () => {
+    console.log("CONSULTAR CLIENTE SELECCIONADO : ", selected);
+
+    async function fetchDataLlamadas() {
+      const res = await registrollamadasServices.listar_registrollamadascliente(selected[0].value);
+      setListRegistroLlamadas(res.data)
+      console.log("RESPUESTA CONSULTA CLIENTE : ", res.data);
+      setActualiza(false);
+    }
+    fetchDataLlamadas();
+
+    setModalCodigoCliente(!modalCodigoCliente);
   }
 
   const abrirCerrarModalEditar = () => {
@@ -217,6 +274,14 @@ function RegistroLlamadas() {
 
   const leerDatosClientes = () => {
     leerModalCodigoCliente();
+  }
+
+  const CrearClientes = () => {
+    history.push("/interlocutores/clientes");
+  }
+
+  const GestionarEquipos = () => {
+    history.push("/mantenimiento/equipos");
   }
 
   const leerModalCodigoCliente = () => {
@@ -251,7 +316,8 @@ function RegistroLlamadas() {
         contacto_rll: registroLlamadasSeleccionado.contacto_rll,
         equipo_rll: registroLlamadasSeleccionado.equipo_rll,
         fecha_rll: registroLlamadasSeleccionado.fecha_rll,
-        observaciones_rll: registroLlamadasSeleccionado.observaciones_rll
+        observaciones_rll: registroLlamadasSeleccionado.observaciones_rll,
+        estado_rll: registroLlamadasSeleccionado.estado_rll
       }]);
       setGrabar(true);
     }
@@ -362,7 +428,7 @@ function RegistroLlamadas() {
     },
     {
       title: 'Motivo',
-      field: 'motivollamada_rll'
+      field: 'nombre_est'
     },
     {
       title: 'Contacto',
@@ -408,7 +474,43 @@ function RegistroLlamadas() {
           }
         </Select>
       </FormControl>
-      <TextField className={styles.inputMaterial} label="Motivo de Llamada" name="motivollamada_rll" onChange={handleChange} />
+      <FormControl className={styles.formControl}>
+        <InputLabel id="idselectEmpresa"> Motivo Llamada </InputLabel>
+        <Select
+          labelId="selectmotivollamada_rll"
+          name="motivollamada_rll"
+          id="idselectmotivollamada_rll"
+          onChange={handleChange}
+        >
+          <MenuItem value="">  <em>None</em> </MenuItem>
+          {
+            motivosLlamadas && motivosLlamadas.map((itemselect) => {
+              return (
+                <MenuItem value={itemselect.id_est}>{itemselect.nombre_est}</MenuItem>
+              )
+            })
+          }
+        </Select>
+      </FormControl>
+      <br />
+      <FormControl className={styles.formControl}>
+        <InputLabel id="idselectEstado"> Estado Llamada </InputLabel>
+        <Select
+          labelId="selectestado_rll"
+          name="estado_rll"
+          id="idselectestado_rll"
+          onChange={handleChange}
+        >
+          <MenuItem value="">  <em>None</em> </MenuItem>
+          {
+            estadosLlamadas && estadosLlamadas.map((itemselect) => {
+              return (
+                <MenuItem value={itemselect.id_est}>{itemselect.nombre_est}</MenuItem>
+              )
+            })
+          }
+        </Select>
+      </FormControl>
       <br />
       <TextField type="date" InputLabelProps={{ shrink: true }} name="fecha_rll"
         defaultValue={Moment(fechaactual).format('YYYY-MM-DD')} label="Fecha Llamada"
@@ -470,7 +572,118 @@ function RegistroLlamadas() {
   //value={registroLlamadasSeleccionado && registroLlamadasSeleccionado.empresa_estcli}
   const llamadaeditar = (
     <div className={styles.modal}>
-      <Typography align="center" className={styles.typography} variant="button" display="block">Actualizar Estados del Cliente</Typography>
+      <Typography align="center" className={styles.typography} variant="button" display="block">Actualizar Registro de Llamada</Typography>
+      <FormControl className={styles.formControl}>
+        <InputLabel id="idselectEmpresa"> Cliente </InputLabel>
+        <Select
+          labelId="selectCliente"
+          name="cliente_rll"
+          id="idselectcliente_rll"
+          onChange={handleChange}
+          value={registroLlamadasSeleccionado && registroLlamadasSeleccionado.cliente_rll}
+          defaultValue={cliente[0] && cliente[0].id_cli}
+        >
+          <MenuItem value="">  <em>None</em> </MenuItem>
+          {
+            listarClientes.map((itemselect) => {
+              return (
+                <MenuItem value={itemselect.id_cli}>{itemselect.razonsocial_cli}</MenuItem>
+              )
+            })
+          }
+        </Select>
+      </FormControl>
+      <FormControl className={styles.formControl}>
+        <InputLabel id="idselectEmpresa"> Motivo Llamada </InputLabel>
+        <Select
+          labelId="selectmotivollamada_rll"
+          name="motivollamada_rll"
+          id="idselectmotivollamada_rll"
+          onChange={handleChange}
+          value={registroLlamadasSeleccionado && registroLlamadasSeleccionado.motivollamada_rll}
+        >
+          <MenuItem value="">  <em>None</em> </MenuItem>
+          {
+            motivosLlamadas && motivosLlamadas.map((itemselect) => {
+              return (
+                <MenuItem value={itemselect.id_est}>{itemselect.nombre_est}</MenuItem>
+              )
+            })
+          }
+        </Select>
+      </FormControl>
+      <br />
+      <FormControl className={styles.formControl}>
+        <InputLabel id="idselectEstado"> Estado Llamada </InputLabel>
+        <Select
+          labelId="selectestado_rll"
+          name="estado_rll"
+          id="idselectestado_rll"
+          onChange={handleChange}
+          value={registroLlamadasSeleccionado && registroLlamadasSeleccionado.estado_rll}
+        >
+          <MenuItem value="">  <em>None</em> </MenuItem>
+          {
+            estadosLlamadas && estadosLlamadas.map((itemselect) => {
+              return (
+                <MenuItem value={itemselect.id_est}>{itemselect.nombre_est}</MenuItem>
+              )
+            })
+          }
+        </Select>
+      </FormControl>
+      <br />
+      <TextField type="date" InputLabelProps={{ shrink: true }} name="fecha_rll"
+        defaultValue={Moment(registroLlamadasSeleccionado.fecha_rll).format('YYYY-MM-DD')} label="Fecha Llamada"
+        fullWidth onChange={handleChange} value={registroLlamadasSeleccionado && registroLlamadasSeleccionado.fecha_rll} />
+      <FormControl className={styles.formControl}>
+        <InputLabel id="contacto_rll">Contacto</InputLabel>
+        <Select
+          labelId="selectcontacto_rll"
+          name="contacto_rll"
+          id="idselectcontacto_rll"
+          fullWidth
+          onChange={handleChange}
+          value={registroLlamadasSeleccionado && registroLlamadasSeleccionado.contacto_rll}
+        //disabled="true"
+        >
+          <MenuItem value=""> <em>None</em> </MenuItem>
+          {
+            listContactos && listContactos.map((itemselect) => {
+              return (
+                <MenuItem value={itemselect.id_con}>{itemselect.primer_nombre_con}{" "}
+                  {itemselect.primer_apellido_con}</MenuItem>
+              )
+            })
+          }
+        </Select>
+      </FormControl>
+      <FormControl className={styles.formControl}>
+        <InputLabel id="contacto_rll">Equipos</InputLabel>
+        <Select
+          labelId="selectequipo_rll"
+          name="equipo_rll"
+          id="idselectequipo_rll"
+          fullWidth
+          onChange={handleChange}
+          value={registroLlamadasSeleccionado && registroLlamadasSeleccionado.equipo_rll}
+        //disabled="true"
+        //defaultValue={0}
+        >
+          <MenuItem value=""> <em>None</em> </MenuItem>
+          {
+            listarEquipos && listarEquipos.map((itemselect) => {
+              return (
+                <MenuItem value={itemselect.id_equ}>{itemselect.referencia_dequ}{" "}
+                  {itemselect.modelo_dequ}{" "}{itemselect.direccion_dequ}
+                </MenuItem>
+              )
+            })
+          }
+        </Select>
+      </FormControl>
+      <TextField className={styles.inputMaterial} label="Observaciones" name="observaciones_rll" onChange={handleChange}
+        value={registroLlamadasSeleccionado && registroLlamadasSeleccionado.observaciones_rll} />
       <br /><br />
       <div align="right">
         <Button className={styles.button} color="primary" onClick={() => actualizarRegistroLlamada()} >Editar</Button>
@@ -524,21 +737,41 @@ function RegistroLlamadas() {
         <br />
         <div align="center">
           <Button className={styles.button} variant="contained" startIcon={<SaveIcon />} color="primary"
-            onClick={() => abrirCerrarModalInsertar()}>  Crear Registro Cliente
+            onClick={() => abrirCerrarModalInsertar()}>  Crear Registro Llamada
+          </Button>
+          <Button className={styles.button} variant="contained" startIcon={<SaveIcon />} color="primary"
+            onClick={() => consultarRegistroLlamadas()}>  Consultar Registro Llamada
           </Button>
         </div>
       </div>
     </div>
   )
 
-
   return (
     <div className="App">
       <br />
-      <Button className={styles.button}
-        variant="contained" startIcon={<ForwardIcon />} color="primary" onClick={() => leerDatosClientes()}
-      > Seleccionar Cliente
-      </Button>
+      <Grid container spacing={2} >
+      <Grid item xs={12} md={3}></Grid>
+      <Grid item xs={12} md={2}>
+          <Button className={styles.button3}
+            variant="contained" startIcon={<ForwardIcon />} color="primary" onClick={() => GestionarEquipos()}
+          > Gestionar Equipo
+          </Button>
+        </Grid>
+      <Grid item xs={12} md={2}>
+          <Button className={styles.button}
+            variant="contained" startIcon={<ForwardIcon />} color="primary" onClick={() => CrearClientes()}
+          > Crear Cliente
+          </Button>
+        </Grid>
+        <Grid item xs={12} md={2}>
+          <Button className={styles.button4}
+            variant="contained" startIcon={<ForwardIcon />} color="primary" onClick={() => leerDatosClientes()}
+          > Seleccionar Cliente
+          </Button>
+        </Grid>
+      </Grid>
+
       <MaterialTable
         columns={columnas}
         data={listRegistroLlamadas}

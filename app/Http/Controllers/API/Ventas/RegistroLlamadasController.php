@@ -18,6 +18,7 @@ class RegistroLlamadasController extends Controller
             $insert['fecha_rll']           = $request['fecha_rll'];
             $insert['equipo_rll']          = $request['equipo_rll'];
             $insert['observaciones_rll']   = $request['observaciones_rll'];
+            $insert['estado_rll']   = $request['estado_rll'];
 
             RegistroLlamadas::insert($insert);
     
@@ -37,12 +38,13 @@ class RegistroLlamadasController extends Controller
           try {
 
             $data = DB::select("SELECT t0.*, t1.*, t2.nombre_ciu, t4.direccion_dequ, t4.referencia_dequ, 
-                                t4.modelo_dequ,
+                                t4.modelo_dequ, t5.nombre_est,
                                 concat(t3.primer_nombre_con,' ',t3.primer_apellido_con) as nombrecontacto
             FROM seguimientoclientes t0 INNER JOIN interlocutores_cli as t1 INNER JOIN ciudades as t2
                                         INNER JOIN contactos as t3 INNER JOIN datosadicionalequipos as t4
+                                        INNER JOIN estados as t5
             WHERE t0.cliente_rll = t1.id_cli and t1.ciudad_cli = t2.id_ciu and t3.id_con = t0.contacto_rll
-              and t0.equipo_rll = t4.id_dequ");
+              and t0.equipo_rll = t4.id_dequ and t0.motivollamada_rll = t5.id_est");
   
             $response['data'] = $data;
             $response['message'] = "load successful";
@@ -58,9 +60,14 @@ class RegistroLlamadasController extends Controller
         public function listar_registrollamadascliente($cliente_rll){
           try {
     
-            $data = DB::select("SELECT t0.*, t1.*, t4.direccion_dequ, t4.referencia_dequ, t4.modelo_dequ
+            $data = DB::select("SELECT t0.*, t1.*, t4.direccion_dequ, t4.referencia_dequ, t4.modelo_dequ,
+                                       t5.nombre_est,
+                                       concat(t3.primer_nombre_con,' ',t3.primer_apellido_con) as nombrecontacto
             FROM seguimientoclientes t0 INNER JOIN interlocutores_cli as t1 INNER JOIN datosadicionalequipos as t4
-            WHERE t0.cliente_rll = t1.id_cli and t0.cliente_rll = $cliente_rll and t0.equipo_rll = t4.id_dequ");
+                                        INNER JOIN estados as t5 INNER JOIN contactos as t3
+            WHERE t0.cliente_rll = t1.id_cli and t0.cliente_rll = $cliente_rll and t0.equipo_rll = t4.id_dequ
+              and t0.motivollamada_rll = t5.id_est and t3.id_con = t0.contacto_rll
+            ORDER BY t0.id_rll ASC ");
     
             if ($data) {
               $response['data'] = $data;
@@ -112,6 +119,7 @@ class RegistroLlamadasController extends Controller
             $data['fecha_rll']         = $request['fecha_rll'];
             $data['equipo_rll']        = $request['equipo_rll'];
             $data['observaciones_rll'] = $request['observaciones_rll'];
+            $data['estado_rll']   = $request['estado_rll'];
             //Console::info('mymessage');
   
             $res = RegistroLlamadas::where("id_rll",$id_rll)->update($data);

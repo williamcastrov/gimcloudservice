@@ -153,6 +153,8 @@ Route::get('/flotarenta/informeubicacionesequipos', 'App\Http\Controllers\GimCon
 Route::get('/rentabilidad/conceptosrentabilidad', 'App\Http\Controllers\GimController@index');
 Route::get('/rentabilidad/conceptosrentabilidadperiodo', 'App\Http\Controllers\GimController@index');
 
+Route::get('/alertas/ofrecerservicios', 'App\Http\Controllers\GimController@index');
+Route::get('/informes/ofertarservicios', 'App\Http\Controllers\GimController@index');
 
 // Rutas Costos
 Route::get('/costos/costosvariables', 'App\Http\Controllers\GimController@index');

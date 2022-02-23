@@ -47,6 +47,24 @@ equipos.listEquiposMontacargas = async () => {
     return res;
 }
 
+equipos.listar_equiposofrecerservicios = async (cliente) => {
+    const urlList = baseUrl+"/listar_equiposofrecerservicios/"+cliente
+    const res = await axios.get(urlList)
+    .then(response=>{ return response.data; })
+    .catch(error=>{ return error; })
+   
+    return res;
+}
+
+equipos.listar_equiposofertarservicios = async () => {
+    const urlList = baseUrl+"/listar_equiposofertarservicios"
+    const res = await axios.get(urlList)
+    .then(response=>{ return response.data; })
+    .catch(error=>{ return error; })
+   
+    return res;
+}
+
 equipos.listEquiposMontacargasusuario = async () => {
     const urlList = baseUrl+"/listar_equiposmontacargasusuario"
     const res = await axios.get(urlList)

@@ -168,6 +168,84 @@ class EquiposController extends Controller
           return $response;
       }
 
+      public function listar_equiposofrecerservicios($cliente){  
+        try {
+          //Muestra Unicamente los tipos de Interlocutores PROVEEDORES = 1
+          $hoy =  date("Y-m-d");
+          $fecha = date("Y-m-d",strtotime($hoy."- 365 days")); 
+          $nuevafecha =  "'".$fecha."'";
+          //echo $otra;
+          //exit;
+
+
+          $data = DB::select("SELECT t0.*, t1.nombre_emp, t2.descripcion_fre, t3.razonsocial_cli, t4.descripcion_mar,
+                                     t5.descripcion_grp,  t5.codigogrupo_grp, t6.nombre_est, t7.nombre_estcli, t8.nombre_estmtto,
+                                     t9.codigo_sgre,      t9.descripcion_sgre, t5.id_grp, t9.id_sgre, datosadicionalequipos.referencia_dequ,
+                                     datosadicionalequipos.modelo_dequ, datosadicionalequipos.serie_dequ, datosadicionalequipos.annofabricacion_dequ,
+                                     t10.nombre_estcal
+                  FROM equipos as t0 INNER JOIN empresa as t1 INNER JOIN frecuencias as t2 INNER JOIN interlocutores_cli as t3
+                                     INNER JOIN marcas  as t4 INNER JOIN gruposequipos as t5 INNER JOIN estados  as t6
+                                     INNER JOIN estadoscliente as t7  INNER JOIN estadosmtto   as t8 INNER JOIN subgrupopartes as t9
+                                     INNER JOIN estadoscalidad as t10
+                                     left join datosadicionalequipos on (datosadicionalequipos.id_dequ = t0.id_equ)
+                  WHERE t0.empresa_equ        = t1.id_emp and t0.frecuencia_equ    = t2.id_fre    and t0.propietario_equ = t3.id_cli    and
+                        t0.marca_equ          = t4.id_mar and t0.grupoequipo_equ   = t5.id_grp    and t0.tipo_equ        IN (8,18,19)   and
+                        t0.estadocontable_equ = t6.id_est and t0.estadocliente_equ = t7.id_estcli and t0.estadomtto_equ  = t8.id_estmtto and
+                        t0.subgrupoparte_equ  = t9.id_sgre and t0.estadocalidad_equ = t10.id_estcal and 
+                        t0.fecharetornaequipo_equ >= $nuevafecha and t0.propietario_equ = $cliente");
+  
+          $response['data'] = $data;
+          
+          // $response['data'] = $data1;
+          $response['message'] = "load successful";
+          $response['success'] = true;
+      
+        } catch (\Exception $e) {
+          $response['message'] = $e->getMessage();
+          $response['success'] = false;
+        }
+          return $response;
+      }
+
+      public function listar_equiposofertarservicios(){  
+        try {
+          //Muestra Unicamente los tipos de Interlocutores PROVEEDORES = 1
+          $hoy =  date("Y-m-d");
+          $fecha = date("Y-m-d",strtotime($hoy."- 365 days")); 
+          $nuevafecha =  "'".$fecha."'";
+          //echo $otra;
+          //exit;
+
+
+          $data = DB::select("SELECT t0.*, t1.nombre_emp, t2.descripcion_fre, t3.razonsocial_cli, t4.descripcion_mar,
+                                     t5.descripcion_grp,  t5.codigogrupo_grp, t6.nombre_est, t7.nombre_estcli, t8.nombre_estmtto,
+                                     t9.codigo_sgre,      t9.descripcion_sgre, t5.id_grp, t9.id_sgre, datosadicionalequipos.referencia_dequ,
+                                     datosadicionalequipos.modelo_dequ, datosadicionalequipos.serie_dequ, datosadicionalequipos.annofabricacion_dequ,
+                                     t10.nombre_estcal, datosadicionalequipos.direccion_dequ
+                  FROM equipos as t0 INNER JOIN empresa as t1 INNER JOIN frecuencias as t2 INNER JOIN interlocutores_cli as t3
+                                     INNER JOIN marcas  as t4 INNER JOIN gruposequipos as t5 INNER JOIN estados  as t6
+                                     INNER JOIN estadoscliente as t7  INNER JOIN estadosmtto   as t8 INNER JOIN subgrupopartes as t9
+                                     INNER JOIN estadoscalidad as t10
+                                     left join datosadicionalequipos on (datosadicionalequipos.id_dequ = t0.id_equ)
+                  WHERE t0.empresa_equ        = t1.id_emp and t0.frecuencia_equ    = t2.id_fre    and t0.propietario_equ = t3.id_cli    and
+                        t0.marca_equ          = t4.id_mar and t0.grupoequipo_equ   = t5.id_grp    and t0.tipo_equ        IN (8,18,19)   and
+                        t0.estadocontable_equ = t6.id_est and t0.estadocliente_equ = t7.id_estcli and t0.estadomtto_equ  = t8.id_estmtto and
+                        t0.subgrupoparte_equ  = t9.id_sgre and t0.estadocalidad_equ = t10.id_estcal and 
+                        t0.fecharetornaequipo_equ >= $nuevafecha");
+  
+          $response['data'] = $data;
+          
+          // $response['data'] = $data1;
+          $response['message'] = "load successful";
+          $response['success'] = true;
+      
+        } catch (\Exception $e) {
+          $response['message'] = $e->getMessage();
+          $response['success'] = false;
+        }
+          return $response;
+      }
+
       public function listar_equiposmontacargasusuario(){  
         try {
           //Muestra Unicamente los tipos de Interlocutores PROVEEDORES = 1

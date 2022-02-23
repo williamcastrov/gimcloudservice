@@ -86,7 +86,7 @@ function Informes() {
             <ListItemIcon>
               <ReorderIcon />
             </ListItemIcon>
-            <ListItemText primary="Flota Renta" />
+            <ListItemText primary="Ventas de Servicios" />
             {openOT ? <ExpandLess /> : <ExpandMore />}
           </ListItem>
           <Collapse in={openOT} timeout="auto" unmountOnExit>
@@ -103,11 +103,11 @@ function Informes() {
                 </ListItemIcon>
                 <ListItemText primary="Informe Registro Llamadas" />
               </ListItem>
-              <ListItem component={Link} button to="/flotarenta/informeseguros" className={classes.nested}>
+              <ListItem component={Link} button to="/informes/ofertarservicios" className={classes.nested}>
                 <ListItemIcon>
                   <ReorderIcon />
                 </ListItemIcon>
-                <ListItemText primary="Informe Seguros" />
+                <ListItemText primary="Ofertar Servicio Mtto" />
               </ListItem>
               <ListItem component={Link} button to="/flotarenta/informeequipos" className={classes.nested}>
                 <ListItemIcon>
@@ -120,12 +120,6 @@ function Informes() {
                   <ReorderIcon />
                 </ListItemIcon>
                 <ListItemText primary="Informe Pendientes" />
-              </ListItem>
-              <ListItem component={Link} button to="/flotarenta/controlalzas" className={classes.nested}>
-                <ListItemIcon>
-                  <ReorderIcon />
-                </ListItemIcon>
-                <ListItemText primary="Control Alzas" />
               </ListItem>
               <ListItem component={Link} button to="/flotarenta/informeot" className={classes.nested}>
                 <ListItemIcon>
@@ -145,42 +139,16 @@ function Informes() {
             <ListItemText primary="Informes MT" />
             {openEQ ? <ExpandLess /> : <ExpandMore />}
           </ListItem>
-
           <Collapse in={openEQ} timeout="auto" unmountOnExit>
             <List component="div" disablePadding>
-              <ListItem component={Link} button to="/activos/areas" className={classes.nested}>
-                <ListItemIcon>
-                  < ListAltIcon />
-                </ListItemIcon>
-                <ListItemText primary="Listar Información de la MT" />
-              </ListItem>
-              <ListItem component={Link} button to="/activos/areas" className={classes.nested} >
-                <ListItemIcon>
-                  < ListAltIcon />
-                </ListItemIcon>
-                <ListItemText primary="Listar Todas las MT" />
-              </ListItem>
-              <ListItem component={Link} button to="/activos/cencostos" className={classes.nested}>
-                <ListItemIcon>
-                  < ListAltIcon />
-                </ListItemIcon>
-                <ListItemText primary="Listar Todos los Accesorios" />
-              </ListItem>
               <ListItem component={Link} button to="/flotarenta/informehojavidaequipos" className={classes.nested}>
                 <ListItemIcon>
                   < ListAltIcon />
                 </ListItemIcon>
                 <ListItemText primary="Hoja Vida Equipos" />
               </ListItem>
-              <ListItem component={Link} button to="/flotarenta/informeubicacionesequipos" className={classes.nested}>
-                <ListItemIcon>
-                  < ListAltIcon />
-                </ListItemIcon>
-                <ListItemText primary="Ubicaciones Equipos" />
-              </ListItem>
             </List>
           </Collapse>
-
         </List>
       </Collapse>
     </div>

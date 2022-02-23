@@ -123,7 +123,7 @@ function RegistroLlamadas() {
                             return (
                                 <tr>
                                     <td>{llamadas.razonsocial_cli}</td>
-                                    <td>{llamadas.motivollamada_rll}</td>
+                                    <td>{llamadas.nombre_est}</td>
                                     <td>{llamadas.fecha_rll}</td>
                                     <td>{llamadas.nombrecontacto}</td>
                                     <td>{llamadas.nombre_ciu}</td>

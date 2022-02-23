@@ -76,6 +76,8 @@ Route::get('/estados/listar_estadosseguros', 'App\Http\Controllers\API\Parameter
 Route::get('/estados/listar_estadosequipos', 'App\Http\Controllers\API\Parameters\EstadosController@listar_estadosequipos');
 Route::get('/estados/listar_estadosequipooperacion', 'App\Http\Controllers\API\Parameters\EstadosController@listar_estadosequipooperacion');
 Route::get('/estados/listar_estadosllamadas', 'App\Http\Controllers\API\Parameters\EstadosController@listar_estadosllamadas');
+Route::get('/estados/listar_estadosregistrollamadas', 'App\Http\Controllers\API\Parameters\EstadosController@listar_estadosregistrollamadas');
+
 Route::post('/estados/create', 'App\Http\Controllers\API\Parameters\EstadosController@create');
 Route::get('/estados/get/{id}', 'App\Http\Controllers\API\Parameters\EstadosController@get');
 Route::delete('/estados/delete/{id}', 'App\Http\Controllers\API\Parameters\EstadosController@delete');
@@ -320,6 +322,9 @@ Route::get('/equipos/listar_equipos', 'App\Http\Controllers\API\Mantenimiento\Eq
 Route::get('/equipos/listar_reporteequipos', 'App\Http\Controllers\API\Mantenimiento\EquiposController@listar_reporteequipos');
 Route::get('/equipos/listar_bajasequiposhistoricos', 'App\Http\Controllers\API\Mantenimiento\EquiposController@listar_bajasequiposhistoricos');
 Route::get('/equipos/listar_equiposmontacargas', 'App\Http\Controllers\API\Mantenimiento\EquiposController@listar_equiposmontacargas');
+Route::get('/equipos/listar_equiposofrecerservicios/{id}', 'App\Http\Controllers\API\Mantenimiento\EquiposController@listar_equiposofrecerservicios');
+Route::get('/equipos/listar_equiposofertarservicios', 'App\Http\Controllers\API\Mantenimiento\EquiposController@listar_equiposofertarservicios');
+
 Route::get('/equipos/listar_equiposmontacargasusuario', 'App\Http\Controllers\API\Mantenimiento\EquiposController@listar_equiposmontacargasusuario');
 Route::get('/equipos/listar_alertasestadosequipos/{id}', 'App\Http\Controllers\API\Mantenimiento\EquiposController@listar_alertasestadosequipos');
 Route::get('/equipos/sumatotalequipos', 'App\Http\Controllers\API\Mantenimiento\EquiposController@sumatotalequipos');
