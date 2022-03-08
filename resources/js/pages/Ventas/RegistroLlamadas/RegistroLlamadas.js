@@ -679,7 +679,8 @@ function RegistroLlamadas() {
                 </MenuItem>
               )
             })
-          }
+          }}
+          
         </Select>
       </FormControl>
       <TextField className={styles.inputMaterial} label="Observaciones" name="observaciones_rll" onChange={handleChange}

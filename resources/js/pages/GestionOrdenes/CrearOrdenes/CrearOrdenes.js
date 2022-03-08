@@ -9,6 +9,7 @@ import CachedIcon from '@material-ui/icons/Cached';
 import ReplayIcon from '@material-ui/icons/Replay';
 import BuildIcon from '@material-ui/icons/Build';
 import { green, blue, blueGrey, red } from '@material-ui/core/colors';
+import { MultiSelect } from "react-multi-select-component";
 import ForwardIcon from '@material-ui/icons/Forward';
 import swal from 'sweetalert';
 import Moment from 'moment';
@@ -114,6 +115,10 @@ const useStyles = makeStyles((theme) => ({
     fontSize: 22,
     color: "#ff3d00"
   },
+  typography2: {
+    fontSize: 16,
+    color: "#ff3d00"
+  },
   button: {
     color: theme.palette.getContrastText(blueGrey[500]),
     backgroundColor: green[700],
@@ -153,6 +158,7 @@ function CrearOrdenes(props) {
 
   const styles = useStyles();
 
+  const [modalCodigoCliente, setModalCodigoCliente] = useState(false);
   const [modalCodigoEquipo, setModalCodigoEquipo] = useState(false);
   const [listarOrdenes, setListarOrdenes] = useState([]);
   const [modalInsertar, setModalInsertar] = useState(false);
@@ -161,6 +167,7 @@ function CrearOrdenes(props) {
   const [modalHerramientas, setModalHerramientas] = useState(false);
   const [formError, setFormError] = useState(false);
   const [modalPendiente, setModalPendiente] = useState(false);
+  const [selected, setSelected] = useState([]);
 
   const [listarUsuarios, setListUsuarios] = useState([]);
   const [listarEmpresas, setListarEmpresas] = useState([]);
@@ -184,13 +191,14 @@ function CrearOrdenes(props) {
   const [grabar, setGrabar] = React.useState(false);
   const [confirmar, setConfirmar] = React.useState(false);
   const [editar, setEditar] = React.useState(false);
+  const [clientesMultiselect, setClientesMultiselect] = useState([]);
 
   const fechaactual = Moment(new Date()).format('YYYY-MM-DD HH:mm:ss');
   //const fechaactual = "2000/01/01 12:00:00";
   const horaactual = Moment(new Date()).format('HH:mm:ss');
   const fechatransporte = Moment(new Date()).format('2001-01-01 00:00:00');
 
-  const [estado, setEstado] = useState(10);
+  const [estado, setEstado] = useState(21);
   const [asignaOperario, setAsignaOperario] = useState(0);
   const [cliente, setCliente] = useState(0);
   const [contacto, setContacto] = useState(0);
@@ -290,8 +298,9 @@ function CrearOrdenes(props) {
     async function fetchDataOrdenes() {
       const res = await crearordenesServices.listOrdenesServActivas();
       setListarOrdenes(res.data);
-      setActualiza(false);
       //console.log("Lee Ordenes Automaticas", res.data);
+      setActualiza(false);
+      
     }
     fetchDataOrdenes();
   }, [actualiza])
@@ -336,9 +345,17 @@ function CrearOrdenes(props) {
     async function fetchDataClientes() {
       const res = await clientesServices.listClientes();
       setListarClientes(res.data)
-      console.log("INFORMACION CLIENTE ",res.data);
+      //console.log("INFORMACION CLIENTE ", res.data);
     }
     fetchDataClientes();
+
+    async function fetchDataClientesMultiselect() {
+      const res = await clientesServices.listar_clientesmultiselect();
+      setClientesMultiselect(res.data)
+      //console.log(res.data);
+    }
+    fetchDataClientesMultiselect();
+
   }, [])
 
   useEffect(() => {
@@ -386,6 +403,7 @@ function CrearOrdenes(props) {
         //console.log("EQUIPOS : ", res.data)
       } else {
         const res = await equiposServices.listEquiposMontacargas();
+        //console.log("EQUIPOS : ", res.data)
         setListarEquipos(res.data);
       }
     }
@@ -418,6 +436,10 @@ function CrearOrdenes(props) {
     }
     fetchDataContactos();
   }, [])
+
+  const leerModalCodigoCliente = () => {
+    setModalCodigoCliente(!modalCodigoCliente);
+  }
 
   const handleChange = e => {
     const { name, value } = e.target;
@@ -457,6 +479,14 @@ function CrearOrdenes(props) {
   }
 
   const leerDatosEquipos = () => {
+    console.log("CODIGO DEL CLIENTE : ", selected[0].value)
+
+    async function fetchDataEquipos() {
+      const res = await equiposServices.listar_equiposcliente(selected[0].value);
+      setListarEquipos(res.data);
+      console.log("EQUIPOS DEL CLIENTE : ", res.data)
+    }
+    fetchDataEquipos();
     leerModalCodigoEquipo();
   }
 
@@ -464,7 +494,7 @@ function CrearOrdenes(props) {
     console.log("CODIGO EQUIPO : ", equipo);
     async function fetchLeerDatoEquipo() {
       const res = await equiposServices.listUnEquipo(equipo);
-      console.log("CODIGO CLIENTE : ", res.data[0].cliente_ubi)
+      console.log("CODIGO CLIENTE : ", res.data[0])
       setListarUnEquipo(res.data);
       setCliente(res.data[0].cliente_ubi);
       setEquipo(res.data[0].codigo_equ);
@@ -486,6 +516,18 @@ function CrearOrdenes(props) {
   }
 
   const seleccionarOrden = (orden, caso) => {
+    //console.log("ORDEN XXXXXXXXXXXXXXXXXXXX : ", orden)
+    async function fetchDataContactos() {
+      const res = await contactosServices.contactosInterlocutor(orden.cliente_otr);
+      setListarContactosCliente(res.data);
+      //console.log("CONTACTOS : ", res.data)
+      if (!res.success) {
+        //swal("Contactos", "Cliente Seleccionado no tiene Contactos!", "warning", { button: "Aceptar" });
+      }
+    }
+    fetchDataContactos();
+
+
     if (orden.estado_otr === 24 || orden.estado_otr === 27 || orden.estado_otr === 32) {
       swal("Cumplimiento OT", "El estado de la OT no permite cambios", "warning", { button: "Aceptar" });
     } else {
@@ -593,6 +635,10 @@ function CrearOrdenes(props) {
 
   const abrirCerrarModalPendiente = () => {
     setModalPendiente(!modalPendiente);
+  }
+
+  const leerDatosClientes = () => {
+    leerModalCodigoCliente();
   }
 
   useEffect(() => {
@@ -782,73 +828,33 @@ function CrearOrdenes(props) {
     let errors = {};
     let formOk = true;
 
-    if (!ordenSeleccionado.estado_otr) {
-      errors.estado_otr = true;
+    if (!tipooperacion) {
+      alert("1")
+      errors.tipooperacion_otr = true;
       formOk = false;
     }
-    /*
-        if (!ordenSeleccionado.prioridad_otr) {
-          errors.prioridad_otr = true;
-          formOk = false;
-        }
-    */
+
+    if (!ordenSeleccionado.tiposervicio_otr) {
+      alert("2")
+      errors.tiposervicio_otr = true;
+      formOk = false;
+    }
+
     if (!ordenSeleccionado.fechaprogramada_otr) {
+      alert("3")
       errors.fechaprogramada_otr = true;
       formOk = false;
     }
 
     if (!ordenSeleccionado.fechainicia_otr) {
+      alert("4")
       errors.fechainicia_otr = true;
       formOk = false;
     }
 
     if (!ordenSeleccionado.fechafinal_otr) {
+      alert("5")
       errors.fechafinal_otr = true;
-      formOk = false;
-    }
-
-    if (!ordenSeleccionado.equipo_otr) {
-      errors.equipo_otr = true;
-      formOk = false;
-    }
-
-    if (!ordenSeleccionado.proveedor_otr) {
-      errors.proveedor_otr = true;
-      formOk = false;
-    }
-
-    if (!ordenSeleccionado.cliente_otr) {
-      errors.cliente_otr = true;
-      formOk = false;
-    }
-
-    if (!ordenSeleccionado.operario_otr) {
-      errors.operario_otr = true;
-      formOk = false;
-    }
-
-    if (!ordenSeleccionado.contactocliente_otr) {
-      errors.contactocliente_otr = true;
-      formOk = false;
-    }
-
-    if (!ordenSeleccionado.subgrupoequipo_otr) {
-      errors.subgrupoequipo_otr = true;
-      formOk = false;
-    }
-
-    if (!ordenSeleccionado.ciudad_otr) {
-      errors.ciudad_otr = true;
-      formOk = false;
-    }
-    /*
-        if (!ordenSeleccionado.resumenorden_otr) {
-          errors.resumenorden = true;
-          formOk = false;
-        }
-    */
-    if (!ordenSeleccionado.tiposervicio_otr) {
-      errors.tiposervicio_otr = true;
       formOk = false;
     }
 
@@ -856,9 +862,9 @@ function CrearOrdenes(props) {
 
     if (formOk) {
       {
-        let estadoope = 23;
+        let estadoope = 21;
         let actualizaoperario = 0;
-
+/*
         if (ordenSeleccionado.operario_otr !== 0) {
           actualizaoperario = ordenSeleccionado.operario_otr;
           estadoope = 23;
@@ -867,6 +873,7 @@ function CrearOrdenes(props) {
             estadoope = 23;
             actualizaoperario = asignaOperario;
           }
+          */
         //console.log("CODIGO OPERARIO : ", actualizaoperario)
 
         setOrdenSeleccionado([{
@@ -1489,7 +1496,7 @@ function CrearOrdenes(props) {
   const codigoEquipo = (
     <div className="App" >
       <div className={styles.modal2}>
-        <Typography align="center" className={styles.typography} variant="button" display="block" >
+        <Typography align="center" className={styles.typography2} variant="button" display="block" >
           Seleccionar Codigo MT
         </Typography>
         <Grid item xs={12} md={4}>
@@ -1507,7 +1514,9 @@ function CrearOrdenes(props) {
               {
                 listarEquipos && listarEquipos.map((itemselect) => {
                   return (
-                    <MenuItem value={itemselect.id_equ}>{itemselect.codigo_equ}</MenuItem>
+                    <MenuItem value={itemselect.id_equ}>{itemselect.referencia_dequ}{" "}
+                      {itemselect.modelo_dequ}{" "}{itemselect.direccion_dequ}
+                    </MenuItem>
                   )
                 })
               }
@@ -1532,13 +1541,52 @@ function CrearOrdenes(props) {
     </div>
   )
 
+  const codigoCliente = (
+    <div className="App" >
+      <div className={styles.modal3}>
+        <Typography align="center" className={styles.typography2} variant="button" display="block" >
+          Seleccionar Codigo Cliente
+        </Typography>
+        <Grid item xs={12} md={4}>
+          <MultiSelect className="inputmultiselect"
+            options={clientesMultiselect}
+            value={selected}
+            onChange={setSelected}
+            labelledBy="Seleccione el Cliente"
+            overrideStrings={{
+              allItemsAreSelected:
+                "All items are selected.",
+              clearSearch:
+                "Limpiar",
+              noOptions:
+                "No options",
+              search: "Buscar",
+              selectAll:
+                "Marcar solo uno",
+              selectAllFiltered:
+                "Select All (Filtered)",
+              selectSomeItems:
+                "Seleccionar Cliente ...",
+            }}
+          />
+        </Grid>
+        <br />
+        <div align="center">
+          <Button className={styles.button} variant="contained" startIcon={<SaveIcon />} color="primary"
+            onClick={() => leerDatosEquipos()}>  Seleccionar Equipo
+          </Button>
+        </div>
+      </div>
+    </div>
+  )
+
   return (
     <div className="App">
       <br />
       <ButtonGroup  >
         <Button className={styles.button}
-          variant="contained" startIcon={<ForwardIcon />} color="primary" onClick={() => leerDatosEquipos()}
-        > Seleccionar Equipo
+          variant="contained" startIcon={<ForwardIcon />} color="primary" onClick={() => leerDatosClientes()}
+        > Seleccionar Cliente
         </Button>
       </ButtonGroup>
       <ButtonGroup  >
@@ -1606,6 +1654,13 @@ function CrearOrdenes(props) {
         ]}
       />
       { }
+      <Modal
+        open={modalCodigoCliente}
+        onClose={leerModalCodigoCliente}
+      >
+        {codigoCliente}
+      </Modal>
+
       <Modal
         open={modalInsertar}
         onClose={abrirCerrarModalInsertar}
