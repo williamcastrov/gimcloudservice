@@ -120,7 +120,7 @@ function CumplirOrden(props) {
   const [listarOrdenes, setListarOrdenes] = useState([]);
   const [listarActivides, setListarActividades] = useState([]);
   const [ordenServicio, setOrdenServicio] = useState([]);
- 
+
   const [modalEditar, setModalEditar] = useState(false);
   const [modalFirmar, setModalFirmar] = useState(false);
   const [modalActividades, setModalActividades] = useState(false);
@@ -208,7 +208,19 @@ function CumplirOrden(props) {
     async function fetchDataActividades() {
       const res = await cumplimientooserServices.leeractividadesot(idorden);
       setListarActividades(res.data);
-      //console.log("Actividades OT", res.data);
+      /*
+        then(
+          (response) => {
+            if (response) {
+              setListarActividades(res.data);
+              //console.log("Actividades OT", res.data);
+            } else {
+              console.log("RESPUESTA ACTIVIDADES: ", response);
+              //return null;
+            }
+          }
+        );
+     */
     }
     fetchDataActividades();
   }
@@ -290,10 +302,6 @@ function CumplirOrden(props) {
       cellStyle: { minWidth: 100 }
     },
     {
-      field: 'nombretecnico',
-      title: 'Tecnico Asignado'
-    },
-    {
       field: 'razonsocial_cli',
       title: 'Cliente',
       cellStyle: { width: 300, maxWidth: 300 }
@@ -302,11 +310,6 @@ function CumplirOrden(props) {
       field: 'nombre_ciu',
       title: 'Ciudad',
       cellStyle: { minWidth: 150 }
-    },
-    {
-      field: 'descripcion_abc',
-      title: 'Prioridad de la Orden',
-      cellStyle: { minWidth: 100 }
     }
   ]
 
@@ -337,7 +340,11 @@ function CumplirOrden(props) {
       cellStyle: { minWidth: 200 }
     },
     {
-      field: 'fechainicia_cos',
+      field: 'nombretecnico',
+      title: 'Nombre Técnico'
+    },
+    {
+      field: 'fechainicia_cosv',
       title: 'Fecha Inicia',
       cellStyle: { minWidth: 100 }
     },
@@ -410,11 +417,6 @@ function CumplirOrden(props) {
         data={listarOrdenes}
         title="GESTIONAR ORDENES DE SERVICIO"
         actions={[
-          {
-            icon: 'edit',
-            tooltip: 'Cumplimiento Orden',
-            onClick: (event, rowData) => seleccionarOrden(rowData, "Editar")
-          },
           {
             icon: PlaylistAddCheckIcon,
             tooltip: 'Firmar Orden',

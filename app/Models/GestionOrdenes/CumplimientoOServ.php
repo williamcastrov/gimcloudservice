@@ -39,6 +39,7 @@ class CumplimientoOServ extends Model
 		'tiempotransporte_cosv',
 		'estado_cosv',
 		'horometro_cosv',
+		'combogrupo_cosv',
 		'idcomponente',
 		'seriecomponente',
 		'voltajecomponente',
@@ -47,7 +48,9 @@ class CumplimientoOServ extends Model
 		'celdasreferenciacomponente',
 		'cofreseriecomponentes',
 		'estadocomponentes',
-		'estadooperacionequipo_cosv'
+		'estadooperacionequipo_cosv',
+		'comentarios_cosv',
+		'placavehiculo_cosv'
     ];
 
     public $timestamps = false;

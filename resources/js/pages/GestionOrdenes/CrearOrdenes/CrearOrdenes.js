@@ -451,7 +451,7 @@ function CrearOrdenes(props) {
   }
 
   const contactosInterlocutor = (cliente) => {
-    //console.log("CODIGO CLIENTE : ", cliente)
+    console.log("CODIGO CLIENTE : ", cliente)
 
     async function fetchDataContactos() {
       const res = await contactosServices.contactosInterlocutor(cliente);
@@ -464,37 +464,28 @@ function CrearOrdenes(props) {
     fetchDataContactos();
   }
 
-  const leerContactos = (cliente) => {
-    //console.log("CODIGO CLIENTE : ", cliente)
-
-    async function fetchDataContactos() {
-      const res = await contactosServices.listContactosInterlocutor(cliente);
-      setListarContactos(res.data);
-      //console.log("CONTACTOS : ", res.data)
-      if (!res.success) {
-        swal("Contactos", "Cliente Seleccionado no tiene Contactos!", "warning", { button: "Aceptar" });
-      }
-    }
-    fetchDataContactos();
+  const asignaContacto = (idcontacto) => {
+    //console.log("CODIGO CONTACTO : ", idcontacto);
+    setContacto(idcontacto);
   }
 
   const leerDatosEquipos = () => {
-    console.log("CODIGO DEL CLIENTE : ", selected[0].value)
+    //console.log("CODIGO DEL CLIENTE : ", selected[0].value)
 
     async function fetchDataEquipos() {
       const res = await equiposServices.listar_equiposcliente(selected[0].value);
       setListarEquipos(res.data);
-      console.log("EQUIPOS DEL CLIENTE : ", res.data)
+      //console.log("EQUIPOS DEL CLIENTE : ", res.data)
     }
     fetchDataEquipos();
     leerModalCodigoEquipo();
   }
 
   const DatosEquipos = (equipo) => {
-    console.log("CODIGO EQUIPO : ", equipo);
+    //console.log("CODIGO EQUIPO : ", equipo);
     async function fetchLeerDatoEquipo() {
       const res = await equiposServices.listUnEquipo(equipo);
-      console.log("CODIGO CLIENTE : ", res.data[0])
+      //console.log("DATOS EQUIPO : ", res.data[0])
       setListarUnEquipo(res.data);
       setCliente(res.data[0].cliente_ubi);
       setEquipo(res.data[0].codigo_equ);
@@ -651,7 +642,7 @@ function CrearOrdenes(props) {
   const grabarListaChequeo = async () => {
     const res = await clientesServices.listUnCliente(cliente);
     //setListarClientes(res)
-    //console.log("INFORMACION CLIENTE ",res.data[0].nit_cli);
+    //console.log("CODIGO CONTACTO ", contacto);
 
     setFormError({});
     let errors = {};
@@ -781,7 +772,7 @@ function CrearOrdenes(props) {
 
       async function grabarListaChequeo() {
 
-        //console.log("DATOS ORDEN SELECCIONADO : ", ordenSeleccionado)
+        console.log("DATOS ORDEN SELECCIONADO : ", ordenSeleccionado)
 
         const res = await crearordenesServices.save(ordenSeleccionado[0]);
 
@@ -1148,8 +1139,8 @@ function CrearOrdenes(props) {
               id="idselectcontactocliente_otr"
               fullWidth
               onChange={handleChange}
-              onClick={(e) => contactosInterlocutor(contacto)}
-              defaultValue={contacto}
+              onClick={(e) => asignaContacto(e.target.value)}
+              //defaultValue={contacto}
             >
               <MenuItem value=""> <em>None</em> </MenuItem>
               {

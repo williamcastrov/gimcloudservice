@@ -192,6 +192,16 @@ crearordenes.listUnaOrden = async (id_otr) => {
     return res;
 }
 
+crearordenes.leerot = async (id_otr) => {
+    //console.log("DATA UNA ORDEN : ",id_otr)
+    const urlList = baseUrl+"/leerot/"+id_otr
+    const res = await axios.get(urlList)
+    .then(response=>{ return response.data; })
+    .catch(error=>{ return error; })
+   
+    return res;
+}
+
 crearordenes.leeordentecnico = async (operario_otr) => {
     //console.log("DATA UNA ORDEN : ",id_otr)
     const urlList = baseUrl+"/leeordentecnico/"+operario_otr

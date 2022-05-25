@@ -21,8 +21,8 @@ cumplimientooserv.listCumplimiento = async () => {
     return res;
 }
 
-cumplimientooserv.leerdatoshojadevida = async () => {
-    const urlList = baseUrl+"/leerdatoshojadevida"
+cumplimientooserv.leerdatoshojadevida = async (equipo) => {
+    const urlList = baseUrl+"/leerdatoshojadevida/"+equipo
     const res = await axios.get(urlList)
     .then(response=>{ return response.data; })
     .catch(error=>{ return error; })
@@ -40,7 +40,17 @@ cumplimientooserv.listar_actividadesotrevision = async () => {
 }
 
 cumplimientooserv.listUnCumplimiento = async (id_actividad) => {
+    console.log("DATO ACTIVIDAD : ",id_actividad)
     const urlList = baseUrl+"/get/"+id_actividad
+    const res = await axios.get(urlList)
+    .then(response=>{ return response.data; })
+    .catch(error=>{ return error; })
+   
+    return res;
+}
+
+cumplimientooserv.calificacionot = async (id_actividad) => {
+    const urlList = baseUrl+"/calificacionot/"+id_actividad
     const res = await axios.get(urlList)
     .then(response=>{ return response.data; })
     .catch(error=>{ return error; })

@@ -477,6 +477,7 @@ Route::get('/ordenesserv/listar_ordeneschequeo', 'App\Http\Controllers\API\Gesti
 Route::get('/ordenesserv/listar_ordeneschequeoactivas', 'App\Http\Controllers\API\GestionOrdenes\OrdenesController@listar_ordeneschequeoactivas');
 Route::post('/ordenesserv/create', 'App\Http\Controllers\API\GestionOrdenes\OrdenesController@create');
 Route::get('/ordenesserv/get/{id}', 'App\Http\Controllers\API\GestionOrdenes\OrdenesController@get');
+Route::get('/ordenesserv/leerot/{id}', 'App\Http\Controllers\API\GestionOrdenes\OrdenesController@leerot');
 Route::get('/ordenesserv/leeotmaquina/{id}', 'App\Http\Controllers\API\GestionOrdenes\OrdenesController@leeotmaquina');
 
 Route::get('/ordenesserv/leeordentecnico/{id}', 'App\Http\Controllers\API\GestionOrdenes\OrdenesController@leeordentecnico');

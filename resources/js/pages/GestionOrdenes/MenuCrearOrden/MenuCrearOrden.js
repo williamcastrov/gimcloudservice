@@ -112,12 +112,7 @@ export default function MenuEquipos(props) {
           styles={{ backgroundColor: darkColors.grey, color: lightColors.white }}
           onClick={() => setModalCrearActividad(true)} ><RecentActorsIcon />
         </Button>
-        <Button
-          tooltip="Asignar Orden"
-          rotate={true}
-          styles={{ backgroundColor: darkColors.lightBlue, color: lightColors.white }}
-          onClick={() => setModalAsignarOrden(true)} ><ArrowForwardIcon/>
-        </Button>
+      
         <Button
           tooltip="Gestionar Ordenes!"
           rotate={true}

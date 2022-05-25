@@ -55,11 +55,12 @@ const useStyles = makeStyles((theme) => ({
 
 function CrearActividad(props) {
     const { ordenServicio, actividadesActivasOT, actividadesTotalesOT } = props;
-    //console.log("Codigo Orden : ", ordenServicio);
+    console.log("Codigo Orden : ", ordenServicio);
     const styles = useStyles();
     const history = useHistory();
     const [operario, setOperario] = React.useState(0);
     const [operarioDos, setOperarioDos] = React.useState(0);
+    const [comentarios, setComentarios] = React.useState(0);
     const [grabar, setGrabar] = React.useState(false);
 
     const [listarOrdenes, setListarOrdenes] = useState([]);
@@ -99,7 +100,8 @@ function CrearActividad(props) {
         finaltransporte_cosv: fechainicial,
         tiempotransporte_cosv: 0,
         horometro_cosv:0,
-        estado_cosv: 12,
+        combogrupo_cosv:0,
+        estado_cosv: 23,
         idcomponente: 0,
         seriecomponente: 0,
         voltajecomponente: 0,
@@ -108,14 +110,16 @@ function CrearActividad(props) {
         celdasreferenciacomponente: 0,
         cofreseriecomponentes: 0,
         estadocomponentes: 0,
-        estadooperacionequipo_cosv: 35,
+        estadooperacionequipo_cosv: 81,
+        comentarios_cosv: comentarios,
+        placavehiculo_cosv: 0
     });
 
     const agregarActividad = (e) => {
         e.preventDefault();
 
         if (operario === '') {
-            swal("Asignar Orden de Trabajo", "Debe asignar un Operario!", "warning", { button: "Aceptar" });
+            swal("Asignar Orden de Trabajo", "Debe asignar un Técnico!", "warning", { button: "Aceptar" });
             return;
         }
         
@@ -131,8 +135,8 @@ function CrearActividad(props) {
         //console.log("OPERARIO DOS : ", operarioDos);
 
         {
-            listarOrdenes.map((asignar) => (
-               setCumplimientoSeleccionado([{
+            listarOrdenes && listarOrdenes.map((asignar) => (
+                setCumplimientoSeleccionado([{
                     id: consecutivo,
                     id_cosv: ordenServicio,
                     id_actividad: idactividad,
@@ -157,7 +161,8 @@ function CrearActividad(props) {
                     finaltransporte_cosv: fechainicial,
                     tiempotransporte_cosv: 0,
                     horometro_cosv: 0,
-                    estado_cosv: 12,
+                    combogrupo_cosv: 0,
+                    estado_cosv: 23,
                     idcomponente: 0,
                     seriecomponente: 0,
                     voltajecomponente: 0,
@@ -166,8 +171,10 @@ function CrearActividad(props) {
                     celdasreferenciacomponente: 0,
                     cofreseriecomponentes: 0,
                     estadocomponentes: 0,
-                    estadooperacionequipo_cosv: 35,
-                }]) 
+                    estadooperacionequipo_cosv: 81,
+                    comentarios_cosv: comentarios,
+                    placavehiculo_cosv: 0
+                }])
             ))
         }
 
@@ -177,9 +184,9 @@ function CrearActividad(props) {
     useEffect(() => {
         setIdCumplimiento(consecutivo);
         async function fetchDataOrdenes() {
-            const res = await crearordenesServices.listUnaOrden(ordenServicio);
+            const res = await crearordenesServices.leerot(ordenServicio);
             setListarOrdenes(res.data);
-            //console.log("Carga Orden", res.data);
+            console.log("Cargar Orden", res.data);
         }
         fetchDataOrdenes();
     }, [])
@@ -195,9 +202,9 @@ function CrearActividad(props) {
 
     useEffect(() => {
         async function fetchDataEmpleados() {
-            const res = await empleadosServices.listEmpleados();
+            const res = await empleadosServices.listEmpleadosOT();
             setListarEmpleados(res.data)
-            //console.log(res.data);
+            //console.log("DATOS EMPLEADOS : ",res.data);
         }
         fetchDataEmpleados();
     }, [])
@@ -249,7 +256,7 @@ function CrearActividad(props) {
                                 </thead>
 
                                 <tbody>
-                                    {listarOrdenes.map((item) => (
+                                    {listarOrdenes && listarOrdenes.map((item) => (
                                         <tr key={item.id_otr}>
                                             <td>{item.id_otr}</td>
                                             <td>{item.nombre_est}</td>
@@ -266,7 +273,7 @@ function CrearActividad(props) {
                     <br />
                     <form onSubmit={agregarActividad} >
                         <FormControl className={styles.formControl}>
-                            <InputLabel id="operario_otr">Operario</InputLabel>
+                            <InputLabel id="operario_otr">Técnico</InputLabel>
                             <Select
                                 labelId="selectoperario_otr_otr"
                                 name="operario_otr"
@@ -286,7 +293,7 @@ function CrearActividad(props) {
                             </Select>
                         </FormControl>
                         <FormControl className={styles.formControl}>
-                            <InputLabel id="operariodos_otr">Operario Dos</InputLabel>
+                            <InputLabel id="operariodos_otr">Técnico Dos</InputLabel>
                             <Select
                                 labelId="selectoperariodos_otr"
                                 name="operariodos_otr"
@@ -305,12 +312,13 @@ function CrearActividad(props) {
                                 }
                             </Select>
                         </FormControl>
+                        <TextField name="comentarios_cosv" label="Comentarios para el Técnico" fullWidth
+                                   onChange={(e) => setComentarios(e.target.value)} />
                         <div >
                             <Button className={styles.button} variant="contained" type="submit" size="small" color="secondary" >
                                 Actualizar
                             </Button>
                         </div>
-
                     </form>
                 </Grid>
 
